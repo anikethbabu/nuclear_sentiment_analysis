@@ -121,23 +121,23 @@ lowest_tone = by_source.sort_values("mean_tone_score", ascending=True).iloc[0]
 public_overall = public_platform[public_platform["platform"] == "ALL"].iloc[0]
 public_by_platform = public_platform[public_platform["platform"] != "ALL"].copy()
 
-st.title("Nuclear Sentiment & Decision Brief")
+st.title("Nuclear Energy Public Sentiment")
 st.markdown(
-    "<div class='small-note'>A decision-support view of how nuclear energy is framed in articles, using model-estimated tone and external ground-truth benchmark labels.</div>",
+    "<div class='small-note'>A plain-language view of how nuclear energy is being discussed across news and public forums.</div>",
     unsafe_allow_html=True,
 )
 
 metric_cols = st.columns([1, 1, 1, 1, 1])
 metric_cols[0].metric("Original Articles", f"{counts.get('articles', 0):,}")
 metric_cols[1].metric("Imported Articles", f"{counts.get('external_articles', 0):,}")
-metric_cols[2].metric("Mean Tone", f"{overall['mean_tone_score']:.3f}")
-metric_cols[3].metric("Best Accuracy", f"{best['accuracy']:.0%}")
-metric_cols[4].metric("Best Macro F1", f"{best['macro_f1']:.3f}")
+metric_cols[2].metric("Current Public Items", f"{int(public_overall['items']):,}")
+metric_cols[3].metric("Concerned Now", f"{public_overall['concerned_share']:.0%}")
+metric_cols[4].metric("Supportive Now", f"{public_overall['supportive_share']:.0%}")
 
 st.markdown(
     f"""
     <div class='takeaway'>
-    <b>Presenter takeaway:</b> nuclear policy is not decided by technical facts alone. Public trust is shaped by the tone of stories people see:
+    <b>Main message:</b> nuclear policy is not decided by facts alone. Public trust is shaped by the tone of stories people see:
     safety risk, climate value, cost, waste, jobs, reliability, and national security. This project turns those narratives into measurable signals,
     so advocates can see where support is strong, where concern is concentrated, and which messages need evidence.
     </div>
@@ -151,9 +151,9 @@ st.markdown(
     <h3>The case this analysis supports</h3>
     <p>
     Nuclear energy can be presented as a serious clean-power option, but the communication challenge is trust.
-    In this corpus the average tone is close to neutral (<b>{overall['mean_tone_score']:.3f}</b>), which means the public conversation is still movable.
-    The most favorable source signal is <b>{highest_tone['source']}</b> at <b>{highest_tone['mean_tone_score']:.3f}</b>;
-    the most skeptical signal is <b>{lowest_tone['source']}</b> at <b>{lowest_tone['mean_tone_score']:.3f}</b>.
+    In this article collection, the overall tone is close to neutral, which means the public conversation is still movable.
+    The most favorable source signal is <b>{highest_tone['source']}</b>;
+    the most skeptical signal is <b>{lowest_tone['source']}</b>.
     That spread is the decision opportunity: respond to concerns directly while making nuclear's reliability, safety record, and clean-energy role easier to understand.
     </p>
     </div>
@@ -168,12 +168,12 @@ decision_cards = [
         "Permits, funding, and adoption move faster when the public hears a credible benefits story and sees risks handled transparently.",
     ),
     (
-        "What leaders should track",
-        "Monitor tone by source, model disagreement, and recurring negative frames; those are early warning signs for public resistance.",
+        "What leaders should watch",
+        "Watch which concerns keep coming up, especially waste, safety, cost, and reactor risk; those are early warning signs for public resistance.",
     ),
     (
         "How to use this",
-        "Build messages around clean reliability, cost realism, waste accountability, and local jobs instead of assuming technical merit sells itself.",
+        "Build messages around clean reliability, cost realism, waste accountability, and local jobs instead of assuming the facts sell themselves.",
     ),
 ]
 for col, (title, body) in zip(decision_cols, decision_cards):
@@ -200,9 +200,9 @@ st.markdown(
 )
 
 public_cols = st.columns([1, 1, 1, 1])
-public_cols[0].metric("Public Items Scored", f"{int(public_overall['items']):,}")
-public_cols[1].metric("Supportive Signal", f"{public_overall['supportive_share']:.0%}")
-public_cols[2].metric("Concerned Signal", f"{public_overall['concerned_share']:.0%}")
+public_cols[0].metric("Public Items Reviewed", f"{int(public_overall['items']):,}")
+public_cols[1].metric("Supportive", f"{public_overall['supportive_share']:.0%}")
+public_cols[2].metric("Concerned", f"{public_overall['concerned_share']:.0%}")
 public_cols[3].metric("Mixed/Neutral", f"{public_overall['neutral_share']:.0%}")
 
 stance_parts = ["supportive_share", "concerned_share", "neutral_share"]
@@ -272,7 +272,7 @@ with public_right:
 st.markdown(
     f"""
     <div class='takeaway'>
-    <b>Current prediction:</b> the accessible public signal is concern-leaning right now:
+    <b>Current reading:</b> the accessible public conversation is concern-leaning right now:
     <b>{public_overall['concerned_share']:.0%}</b> concerned, <b>{public_overall['supportive_share']:.0%}</b> supportive,
     and <b>{public_overall['neutral_share']:.0%}</b> mixed/neutral. The most negative topic signal is
     <b>{public_query.sort_values('mean_tone_score').iloc[0]['query']}</b>, so a pro-nuclear case should lead with transparent answers
@@ -289,7 +289,7 @@ tone_chart = (
     .mark_bar(cornerRadiusTopRight=4, cornerRadiusBottomRight=4)
     .encode(
         y=alt.Y("source:N", sort="-x", title="Source"),
-        x=alt.X("mean_tone_score:Q", title="Mean ensemble tone score", scale=alt.Scale(domain=[-0.15, 0.25])),
+        x=alt.X("mean_tone_score:Q", title="Overall tone", scale=alt.Scale(domain=[-0.15, 0.25])),
         color=alt.Color(
             "mean_tone_score:Q",
             scale=alt.Scale(domain=[-0.12, 0, 0.22], range=["#b64242", "#8b98a8", "#2374ab"]),
@@ -298,8 +298,7 @@ tone_chart = (
         tooltip=[
             alt.Tooltip("source:N", title="Source"),
             alt.Tooltip("articles:Q", title="Articles"),
-            alt.Tooltip("mean_tone_score:Q", title="Mean tone", format=".3f"),
-            alt.Tooltip("mean_model_disagreement:Q", title="Model disagreement", format=".3f"),
+            alt.Tooltip("mean_tone_score:Q", title="Tone", format=".3f"),
         ],
     )
     .properties(height=310)
@@ -327,12 +326,12 @@ with right:
     )
     st.altair_chart(source_mix, use_container_width=True)
 
-st.subheader("Unseen Ground-Truth Benchmark")
+st.subheader("Reliability Check")
 st.markdown(
     f"""
     <div class='small-note'>
-    The benchmark below checks whether the sentiment scoring is credible on genuinely labeled external articles.
-    Best run: <b>{best['accuracy']:.0%}</b> accuracy and <b>{best['macro_f1']:.3f}</b> macro F1.
+    This checks the reading system against a small set of human-labeled articles, so the dashboard is not just guessing.
+    Best result: <b>{best['accuracy']:.0%}</b> correctly classified.
     </div>
     """,
     unsafe_allow_html=True,
@@ -346,8 +345,8 @@ bench_chart = (
     alt.Chart(rank_view)
     .mark_circle(size=130, opacity=0.85)
     .encode(
-        x=alt.X("accuracy:Q", title="Accuracy", scale=alt.Scale(domain=[0.2, 0.9])),
-        y=alt.Y("macro_f1:Q", title="Macro F1", scale=alt.Scale(domain=[0.2, 0.9])),
+        x=alt.X("accuracy:Q", title="Correct classifications", scale=alt.Scale(domain=[0.2, 0.9])),
+        y=alt.Y("macro_f1:Q", title="Balance across viewpoints", scale=alt.Scale(domain=[0.2, 0.9])),
         color=alt.Color(
             "run:N",
             scale=alt.Scale(range=["#2374ab", "#e15759", "#59a14f", "#7f6aad"]),
@@ -355,10 +354,8 @@ bench_chart = (
         ),
         tooltip=[
             alt.Tooltip("run:N", title="Run"),
-            alt.Tooltip("neutral_threshold:Q", title="Neutral threshold", format=".2f"),
-            alt.Tooltip("accuracy:Q", title="Accuracy", format=".2%"),
-            alt.Tooltip("balanced_accuracy:Q", title="Balanced accuracy", format=".2%"),
-            alt.Tooltip("macro_f1:Q", title="Macro F1", format=".3f"),
+            alt.Tooltip("accuracy:Q", title="Correct", format=".2%"),
+            alt.Tooltip("macro_f1:Q", title="Balance score", format=".3f"),
         ],
     )
     .properties(height=300)
@@ -394,19 +391,27 @@ with bench_left:
 with bench_right:
     st.altair_chart(confusion_chart + confusion_text, use_container_width=True)
 
-st.subheader("Fast Evidence Table")
+st.subheader("Reliability Results")
 display_cols = ["model", "neutral_threshold", "accuracy", "balanced_accuracy", "macro_f1", "weighted_f1"]
+evidence_table = unseen_ranking[display_cols].head(8).copy()
+evidence_table["model"] = evidence_table["model"].str.replace(
+    "distilbert-base-uncased-finetuned-sst-2-english", "General article reader", regex=False
+)
+evidence_table["model"] = evidence_table["model"].str.replace(
+    "cardiffnlp/twitter-roberta-base-sentiment-latest", "Social media reader", regex=False
+)
+evidence_table["model"] = evidence_table["model"].str.replace("ProsusAI/finbert", "Finance-news reader", regex=False)
 st.dataframe(
-    unseen_ranking[display_cols].head(8),
+    evidence_table,
     use_container_width=True,
     hide_index=True,
     column_config={
-        "model": "Model",
-        "neutral_threshold": st.column_config.NumberColumn("Neutral Threshold", format="%.2f"),
-        "accuracy": st.column_config.NumberColumn("Accuracy", format="%.1%"),
-        "balanced_accuracy": st.column_config.NumberColumn("Balanced Accuracy", format="%.1%"),
-        "macro_f1": st.column_config.NumberColumn("Macro F1", format="%.3f"),
-        "weighted_f1": st.column_config.NumberColumn("Weighted F1", format="%.3f"),
+        "model": "Reader Type",
+        "neutral_threshold": st.column_config.NumberColumn("Neutral Range", format="%.2f"),
+        "accuracy": st.column_config.NumberColumn("Correct", format="%.1%"),
+        "balanced_accuracy": st.column_config.NumberColumn("Fair Across Groups", format="%.1%"),
+        "macro_f1": st.column_config.NumberColumn("Balance Score", format="%.3f"),
+        "weighted_f1": st.column_config.NumberColumn("Overall Score", format="%.3f"),
     },
 )
 
@@ -419,24 +424,10 @@ extreme = pd.concat(
     ignore_index=True,
 )
 st.dataframe(
-    extreme[["direction", "source", "title", "ensemble_tone_score", "model_disagreement"]],
+    extreme[["direction", "source", "title", "ensemble_tone_score"]],
     use_container_width=True,
     hide_index=True,
     column_config={
         "ensemble_tone_score": st.column_config.NumberColumn("Tone", format="%.3f"),
-        "model_disagreement": st.column_config.NumberColumn("Disagreement", format="%.3f"),
     },
-)
-
-st.subheader("1-Minute Close")
-st.markdown(
-    """
-    <div class='takeaway'>
-    <b>Conclusion:</b> This project does not claim every nuclear article is positive. It shows that sentiment is measurable,
-    varies by outlet, and can be benchmarked against labeled data. For nuclear energy advocates, that means communication strategy
-    can become evidence-driven: identify skeptical frames early, answer them with transparent facts, and emphasize nuclear's role
-    in reliable low-carbon power where the conversation is still neutral enough to shift.
-    </div>
-    """,
-    unsafe_allow_html=True,
 )
