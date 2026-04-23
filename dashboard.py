@@ -147,11 +147,19 @@ st.markdown(
     h1 {font-size: 2.25rem; letter-spacing: 0; margin-bottom: 0.2rem;}
     h2, h3 {letter-spacing: 0;}
     [data-testid="stMetric"] {
-        border: 1px solid #d8dee8;
+        border: 1px solid #334155;
         border-radius: 8px;
         padding: 0.8rem 0.9rem;
-        background: #ffffff;
-        box-shadow: 0 1px 2px rgba(20, 32, 55, 0.04);
+        background: #151c27;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+    }
+    [data-testid="stMetric"] label,
+    [data-testid="stMetric"] [data-testid="stMetricLabel"],
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #f8fafc;
+    }
+    [data-testid="stMetric"] label p {
+        color: #cbd5e1;
     }
     .small-note {color: #5c6675; font-size: 0.92rem;}
     </style>
