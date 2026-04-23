@@ -1,0 +1,12 @@
+{
+  "db_path": "nuclear.db",
+  "output_dir": "models",
+  "table": "articles",
+  "text_limit": 15000,
+  "cv_folds": 5,
+  "run_transformer": true,
+  "transformer_model": "distilbert/distilbert-base-uncased",
+  "transformer_epochs": 2,
+  "transformer_batch_size": 8,
+  "created_at_epoch": 1776921644.530655
+}
