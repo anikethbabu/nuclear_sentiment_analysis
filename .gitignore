@@ -191,6 +191,9 @@ cython_debug/
 # Ruff stuff:
 .ruff_cache/
 
+# Large transformer checkpoints should be uploaded with Git LFS or a model registry.
+models/transformer_distilbert/
+
 # PyPI configuration file
 .pypirc
 

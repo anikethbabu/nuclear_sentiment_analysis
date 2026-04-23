@@ -1,0 +1,14 @@
+accelerate
+datasets
+evaluate
+joblib
+matplotlib
+numpy
+pandas
+scikit-learn
+seaborn
+tabulate
+torch
+tqdm
+transformers
+wordcloud
