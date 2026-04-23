@@ -1,0 +1,13 @@
+{
+  "queries": [
+    "nuclear energy",
+    "nuclear power",
+    "small modular reactor",
+    "nuclear waste",
+    "nuclear reactor"
+  ],
+  "model": "distilbert-base-uncased-finetuned-sst-2-english",
+  "neutral_threshold": 0.8,
+  "max_items_per_source_query": 30,
+  "created_at_epoch": 1776926055.1607854
+}

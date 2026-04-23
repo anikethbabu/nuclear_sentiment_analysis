@@ -13,6 +13,7 @@ ROOT = Path(__file__).parent
 DB_PATH = ROOT / "nuclear.db"
 TONE_DIR = ROOT / "models" / "tone"
 UNSEEN_DIR = ROOT / "models" / "unseen_eval"
+PUBLIC_DIR = ROOT / "models" / "public_now"
 
 
 st.set_page_config(page_title="Nuclear Article Tone Brief", layout="wide")
@@ -97,9 +98,18 @@ def load_outputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict]:
     return article_scores, source_summary, ranking, details
 
 
+@st.cache_data(show_spinner=False)
+def load_public_now() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    platform = pd.read_csv(PUBLIC_DIR / "public_opinion_by_platform.csv")
+    query = pd.read_csv(PUBLIC_DIR / "public_opinion_by_query.csv")
+    items = pd.read_csv(PUBLIC_DIR / "public_opinion_scored_items.csv")
+    return platform, query, items
+
+
 counts = load_db_counts()
 source_counts = load_sources()
 article_scores, source_summary, unseen_ranking, unseen_details = load_outputs()
+public_platform, public_query, public_items = load_public_now()
 
 best = unseen_ranking.iloc[0]
 best_key = f"{best['model']}|threshold={best['neutral_threshold']}"
@@ -108,6 +118,8 @@ overall = source_summary[source_summary["source"] == "ALL"].iloc[0]
 by_source = source_summary[source_summary["source"] != "ALL"].copy()
 highest_tone = by_source.sort_values("mean_tone_score", ascending=False).iloc[0]
 lowest_tone = by_source.sort_values("mean_tone_score", ascending=True).iloc[0]
+public_overall = public_platform[public_platform["platform"] == "ALL"].iloc[0]
+public_by_platform = public_platform[public_platform["platform"] != "ALL"].copy()
 
 st.title("Nuclear Sentiment & Decision Brief")
 st.markdown(
@@ -171,10 +183,104 @@ for col, (title, body) in zip(decision_cols, decision_cards):
             <div class='decision-card'>
             <h4>{title}</h4>
             <p>{body}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.subheader("Public Opinion Now")
+st.markdown(
+    f"""
+    <div class='small-note'>
+    Live directional sample from Google News, Reddit, Hacker News, and GDELT. This is not a statistically representative poll,
+    but it shows what current public/media discussion looks like in accessible sources.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+public_cols = st.columns([1, 1, 1, 1])
+public_cols[0].metric("Public Items Scored", f"{int(public_overall['items']):,}")
+public_cols[1].metric("Supportive Signal", f"{public_overall['supportive_share']:.0%}")
+public_cols[2].metric("Concerned Signal", f"{public_overall['concerned_share']:.0%}")
+public_cols[3].metric("Mixed/Neutral", f"{public_overall['neutral_share']:.0%}")
+
+stance_parts = ["supportive_share", "concerned_share", "neutral_share"]
+stance_long = public_by_platform.melt(
+    id_vars=["platform", "items"],
+    value_vars=stance_parts,
+    var_name="stance",
+    value_name="share",
+)
+stance_long["stance"] = stance_long["stance"].map(
+    {
+        "supportive_share": "Supportive",
+        "concerned_share": "Concerned",
+        "neutral_share": "Mixed/neutral",
+    }
+)
+
+stance_chart = (
+    alt.Chart(stance_long)
+    .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3)
+    .encode(
+        x=alt.X("platform:N", title="Public source"),
+        y=alt.Y("share:Q", title="Share of items", axis=alt.Axis(format="%")),
+        color=alt.Color(
+            "stance:N",
+            scale=alt.Scale(domain=["Supportive", "Concerned", "Mixed/neutral"], range=["#2374ab", "#b64242", "#8b98a8"]),
+            legend=alt.Legend(title=None, orient="bottom"),
+        ),
+        tooltip=[
+            alt.Tooltip("platform:N", title="Source"),
+            alt.Tooltip("stance:N", title="Predicted stance"),
+            alt.Tooltip("share:Q", title="Share", format=".1%"),
+            alt.Tooltip("items:Q", title="Items"),
+        ],
+    )
+    .properties(height=285)
+)
+
+query_chart = (
+    alt.Chart(public_query)
+    .mark_bar(cornerRadiusTopRight=4, cornerRadiusBottomRight=4)
+    .encode(
+        y=alt.Y("query:N", sort="-x", title="Topic"),
+        x=alt.X("mean_tone_score:Q", title="Mean public tone", scale=alt.Scale(domain=[-0.65, 0.1])),
+        color=alt.Color(
+            "mean_tone_score:Q",
+            scale=alt.Scale(domain=[-0.6, -0.25, 0], range=["#b64242", "#8b98a8", "#2374ab"]),
+            legend=None,
+        ),
+        tooltip=[
+            alt.Tooltip("query:N", title="Topic"),
+            alt.Tooltip("items:Q", title="Items"),
+            alt.Tooltip("mean_tone_score:Q", title="Mean tone", format=".3f"),
+            alt.Tooltip("supportive_share:Q", title="Supportive", format=".1%"),
+            alt.Tooltip("concerned_share:Q", title="Concerned", format=".1%"),
+        ],
+    )
+    .properties(height=285)
+)
+
+public_left, public_right = st.columns([1, 1])
+with public_left:
+    st.altair_chart(stance_chart, use_container_width=True)
+with public_right:
+    st.altair_chart(query_chart, use_container_width=True)
+
+st.markdown(
+    f"""
+    <div class='takeaway'>
+    <b>Current prediction:</b> the accessible public signal is concern-leaning right now:
+    <b>{public_overall['concerned_share']:.0%}</b> concerned, <b>{public_overall['supportive_share']:.0%}</b> supportive,
+    and <b>{public_overall['neutral_share']:.0%}</b> mixed/neutral. The most negative topic signal is
+    <b>{public_query.sort_values('mean_tone_score').iloc[0]['query']}</b>, so a pro-nuclear case should lead with transparent answers
+    on safety, waste, and reactor risk before moving to reliability and clean-energy benefits.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 left, right = st.columns([1.15, 0.85])
 

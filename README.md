@@ -80,3 +80,23 @@ Launch the Streamlit dashboard:
 ```
 
 The dashboard is designed for a 1-2 minute presentation: corrected database counts, source-level tone findings, the unseen benchmark leaderboard, the best confusion matrix, representative extreme-tone articles, and a concise decision narrative about how sentiment can affect public support, permitting, investment, and policy momentum for nuclear energy.
+
+## Public Opinion Now
+
+Collect current public-source signals and estimate present stance:
+
+```powershell
+& '.\.venv\Scripts\python.exe' public_opinion_now.py
+```
+
+The live collector pulls accessible public content from Google News RSS, Reddit search, Hacker News, and GDELT when reachable. X/Twitter is not collected without API credentials. Outputs are written to `models/public_now/` and a `public_opinion_items` table is written into `nuclear.db`.
+
+Current live directional sample:
+
+- Items scored: `499`
+- Predicted supportive signal: `27.3%`
+- Predicted concerned signal: `57.5%`
+- Predicted mixed/neutral signal: `15.2%`
+- Most concern-heavy topic in this pull: `nuclear waste`
+
+This is a directional public/media signal, not a statistically representative poll.
