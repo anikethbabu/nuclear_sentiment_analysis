@@ -37,7 +37,6 @@ def import_articles(db_path: Path, external_root: Path, table: str) -> tuple[int
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             article_id TEXT UNIQUE NOT NULL,
             source TEXT NOT NULL,
-            source_type TEXT NOT NULL,
             filename TEXT NOT NULL,
             title TEXT NOT NULL,
             path TEXT NOT NULL,
@@ -68,13 +67,12 @@ def import_articles(db_path: Path, external_root: Path, table: str) -> tuple[int
             cur.execute(
                 f"""
                 INSERT OR REPLACE INTO {table}
-                (article_id, source, source_type, filename, title, path, content, content_sha256, word_count)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (article_id, source, filename, title, path, content, content_sha256, word_count)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     article_id(source, file_path.name),
                     source,
-                    source.lower().replace(" ", "_"),
                     file_path.name,
                     title,
                     str(file_path),

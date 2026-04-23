@@ -24,18 +24,17 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     source TEXT,
-    label TEXT,
     title TEXT,
     url TEXT UNIQUE,
     content TEXT
 )
 """)
 
-def save_article(source, label, title, url, content):
+def save_article(source, title, url, content):
     try:
         cursor.execute(
-            "INSERT OR IGNORE INTO articles VALUES (NULL, ?, ?, ?, ?, ?)",
-            (source, label, title, url, content)
+            "INSERT OR IGNORE INTO articles (source, title, url, content) VALUES (?, ?, ?, ?)",
+            (source, title, url, content)
         )
         conn.commit()
     except:
@@ -64,7 +63,7 @@ def scrape_guardian():
             link = article["webUrl"]
             content = article["fields"].get("bodyText", "")
 
-            save_article("guardian", "mixed", title, link, content)
+            save_article("guardian", title, link, content)
 
         page += 1
         time.sleep(1)
@@ -89,7 +88,7 @@ def scrape_greenpeace():
                 title = page_soup.title.text
                 content = " ".join([p.text for p in page_soup.find_all("p")])
 
-                save_article("greenpeace", "negative", title, link, content)
+                save_article("greenpeace", title, link, content)
                 time.sleep(SLEEP_TIME)
             except:
                 continue
@@ -117,7 +116,7 @@ def scrape_wnn():
                 title = page_soup.title.text
                 content = " ".join([p.text for p in page_soup.find_all("p")])
 
-                save_article("wnn", "pro", title, full_url, content)
+                save_article("wnn", title, full_url, content)
                 time.sleep(SLEEP_TIME)
             except:
                 continue
@@ -143,7 +142,7 @@ def scrape_wna():
             title = page_soup.title.text if page_soup.title else "No Title"
             content = " ".join([p.text for p in page_soup.find_all("p")])
 
-            save_article("wna", "pro", title, full_url, content)
+            save_article("wna", title, full_url, content)
             time.sleep(SLEEP_TIME)
         except:
             continue
@@ -189,7 +188,7 @@ def scrape_beyond_nuclear():
                 title = page_soup.title.text if page_soup.title else "No Title"
                 content = " ".join([p.text for p in page_soup.find_all("p")])
 
-                save_article("beyond_nuclear", "negative", title, link, content)
+                save_article("beyond_nuclear", title, link, content)
                 time.sleep(SLEEP_TIME)
             except:
                 continue

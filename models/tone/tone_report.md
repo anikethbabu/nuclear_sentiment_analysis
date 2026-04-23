@@ -2,8 +2,8 @@
 
 ## Method
 
-The SQLite `label` column is treated only as `source_type`; it is not used as model ground truth.
-No supervised sentiment model is trained from that column. Scores are model-estimated continuous tone values in the range -1 to 1.
+The SQLite database contains no source-rating or sentiment target column.
+No supervised sentiment model is trained from source metadata. Scores are model-estimated continuous tone values in the range -1 to 1.
 
 ## Data
 
@@ -24,4 +24,4 @@ No supervised sentiment model is trained from that column. Scores are model-esti
 
 ## Notes
 
-The SQLite source-type metadata is preserved in per-article output, but it is not used for scoring or summary statistics. Use the continuous `ensemble_tone_score` and `model_disagreement` columns for analysis.
+Use the continuous `ensemble_tone_score` and `model_disagreement` columns for analysis. Accuracy is only reported against external ground-truth label files, never against SQLite source metadata.

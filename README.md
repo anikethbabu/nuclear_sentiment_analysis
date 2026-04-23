@@ -70,3 +70,13 @@ Best current result on 50 matched unseen labeled articles:
 - Macro F1: `0.8001`
 
 These are real benchmark metrics because they compare against the external label file, not the SQLite source-type metadata.
+
+## Presentation Dashboard
+
+Launch the Streamlit dashboard:
+
+```powershell
+& '.\.venv\Scripts\python.exe' -m streamlit run dashboard.py
+```
+
+The dashboard is designed for a 1-2 minute presentation: corrected database counts, source-level tone findings, the unseen benchmark leaderboard, the best confusion matrix, and representative extreme-tone articles.

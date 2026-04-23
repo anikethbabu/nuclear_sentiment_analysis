@@ -47,18 +47,16 @@ def load_articles(db_path: str, table: str, max_articles: int | None) -> pd.Data
     finally:
         con.close()
 
-    required = {"id", "source", "label", "title", "url", "content"}
+    required = {"id", "source", "title", "url", "content"}
     missing = sorted(required - set(df.columns))
     if missing:
         raise ValueError(f"Missing required columns in {table}: {missing}")
 
     df = df.copy()
-    df = df.rename(columns={"label": "source_type"})
     df["title"] = df["title"].map(normalize_text)
     df["content"] = df["content"].map(normalize_text)
     df["text"] = (df["title"] + ". " + df["content"]).map(normalize_text)
     df = df[df["text"].str.len() > 20].drop_duplicates(subset=["url"]).reset_index(drop=True)
-    df["source_type"] = df["source_type"].fillna("unknown").map(lambda x: str(x).strip().lower())
     if max_articles:
         df = df.head(max_articles).copy()
     return df
@@ -160,8 +158,8 @@ def write_report(output_dir: Path, df: pd.DataFrame, summary: pd.DataFrame, mode
         "",
         "## Method",
         "",
-        "The SQLite `label` column is treated only as `source_type`; it is not used as model ground truth.",
-        "No supervised sentiment model is trained from that column. Scores are model-estimated continuous tone values in the range -1 to 1.",
+        "The SQLite database contains no source-rating or sentiment target column.",
+        "No supervised sentiment model is trained from source metadata. Scores are model-estimated continuous tone values in the range -1 to 1.",
         "",
         "## Data",
         "",
@@ -175,13 +173,13 @@ def write_report(output_dir: Path, df: pd.DataFrame, summary: pd.DataFrame, mode
         "",
         "## Notes",
         "",
-        "The SQLite source-type metadata is preserved in per-article output, but it is not used for scoring or summary statistics. Use the continuous `ensemble_tone_score` and `model_disagreement` columns for analysis.",
+        "Use the continuous `ensemble_tone_score` and `model_disagreement` columns for analysis. Accuracy is only reported against external ground-truth label files, never against SQLite source metadata.",
     ]
     (output_dir / "tone_report.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Score nuclear articles without using SQLite source-type labels as sentiment.")
+    parser = argparse.ArgumentParser(description="Score nuclear articles without using SQLite source metadata as sentiment.")
     parser.add_argument("--db", default="nuclear.db")
     parser.add_argument("--table", default="articles")
     parser.add_argument("--output", default="models/tone")
@@ -204,13 +202,13 @@ def main() -> None:
     (output_dir / "tone_run_config.json").write_text(json.dumps(asdict(config), indent=2), encoding="utf-8")
 
     df = load_articles(args.db, args.table, args.max_articles)
-    df[["id", "source", "source_type", "title", "url", "text"]].to_csv(output_dir / "scored_article_input.csv", index=False)
+    df[["id", "source", "title", "url", "text"]].to_csv(output_dir / "scored_article_input.csv", index=False)
 
     model_frames = [score_with_model(df, model, args.max_chunks_per_article) for model in args.models]
     long_scores = pd.concat(model_frames, ignore_index=True)
     long_scores.to_csv(output_dir / "model_tone_scores_long.csv", index=False)
 
-    wide = df[["id", "source", "source_type", "title", "url"]].copy()
+    wide = df[["id", "source", "title", "url"]].copy()
     for frame in model_frames:
         model_name = frame["model"].iloc[0].replace("/", "__")
         renamed = frame.rename(
@@ -225,7 +223,7 @@ def main() -> None:
 
     article_scores, summary = summarize_scores(wide)
     article_scores.to_csv(output_dir / "article_tone_scores.csv", index=False)
-    summary.to_csv(output_dir / "tone_summary_by_source_type.csv", index=False)
+    summary.to_csv(output_dir / "tone_summary_by_source.csv", index=False)
     write_report(output_dir, df, summary, args.models)
     print(f"report={output_dir / 'tone_report.md'}")
 
