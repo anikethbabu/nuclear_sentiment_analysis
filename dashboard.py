@@ -231,17 +231,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 rank_view = unseen_ranking.copy()
-rank_view["reader"] = rank_view["model"].str.replace(
-    "distilbert-base-uncased-finetuned-sst-2-english", "General article reader", regex=False
+rank_view["model_name"] = rank_view["model"].str.replace(
+    "distilbert-base-uncased-finetuned-sst-2-english", "DistilBERT SST-2", regex=False
 )
-rank_view["reader"] = rank_view["reader"].str.replace(
-    "cardiffnlp/twitter-roberta-base-sentiment-latest", "Social media reader", regex=False
+rank_view["model_name"] = rank_view["model_name"].str.replace(
+    "cardiffnlp/twitter-roberta-base-sentiment-latest", "Cardiff RoBERTa", regex=False
 )
-rank_view["reader"] = rank_view["reader"].str.replace("ProsusAI/finbert", "Finance-news reader", regex=False)
-rank_view["reader"] = rank_view["reader"].str.replace("ensemble_mean", "Combined readers", regex=False)
+rank_view["model_name"] = rank_view["model_name"].str.replace("ProsusAI/finbert", "FinBERT", regex=False)
+rank_view["model_name"] = rank_view["model_name"].str.replace("ensemble_mean", "Ensemble Mean", regex=False)
 best_by_reader = (
     rank_view.sort_values(["accuracy", "macro_f1"], ascending=False)
-    .drop_duplicates("reader")
+    .drop_duplicates("model_name")
     .sort_values("accuracy", ascending=False)
 )
 
@@ -249,15 +249,15 @@ bench_chart = (
     alt.Chart(best_by_reader)
     .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4)
     .encode(
-        x=alt.X("reader:N", title=None, sort="-y", axis=alt.Axis(labelAngle=0)),
+        x=alt.X("model_name:N", title=None, sort="-y", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("accuracy:Q", title="Correct classifications", axis=alt.Axis(format="%"), scale=alt.Scale(domain=[0, 0.9])),
         color=alt.Color(
-            "reader:N",
+            "model_name:N",
             scale=alt.Scale(range=["#2374ab", "#e15759", "#59a14f", "#7f6aad"]),
             legend=None,
         ),
         tooltip=[
-            alt.Tooltip("reader:N", title="Reader"),
+            alt.Tooltip("model_name:N", title="Model"),
             alt.Tooltip("accuracy:Q", title="Correct", format=".2%"),
             alt.Tooltip("balanced_accuracy:Q", title="Fair across groups", format=".2%"),
         ],
@@ -295,13 +295,13 @@ with bench_left:
 with bench_right:
     st.altair_chart(confusion_chart + confusion_text, use_container_width=True)
 
-st.subheader("Reader Comparison")
-evidence_table = best_by_reader[["reader", "accuracy", "balanced_accuracy", "macro_f1"]].copy()
+st.subheader("Model Comparison")
+evidence_table = best_by_reader[["model_name", "accuracy", "balanced_accuracy", "macro_f1"]].copy()
 evidence_table["Correct"] = evidence_table["accuracy"].map(lambda value: f"{value:.1%}")
 evidence_table["Fair Across Groups"] = evidence_table["balanced_accuracy"].map(lambda value: f"{value:.1%}")
 evidence_table["Overall Balance"] = evidence_table["macro_f1"].map(lambda value: f"{value:.3f}")
-evidence_table = evidence_table.rename(columns={"reader": "Reader Type"})[
-    ["Reader Type", "Correct", "Fair Across Groups", "Overall Balance"]
+evidence_table = evidence_table.rename(columns={"model_name": "Model"})[
+    ["Model", "Correct", "Fair Across Groups", "Overall Balance"]
 ]
 st.dataframe(
     evidence_table,
