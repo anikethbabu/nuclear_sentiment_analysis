@@ -31,32 +31,13 @@ st.markdown(
         background: #ffffff;
         box-shadow: 0 1px 2px rgba(20, 32, 55, 0.04);
     }
-    .takeaway {
+    .data-note {
         border-left: 4px solid #2374ab;
         padding: 0.75rem 1rem;
         background: #f5f8fb;
         border-radius: 6px;
         margin: 0.35rem 0 0.7rem 0;
     }
-    .thesis {
-        padding: 1rem 1.15rem;
-        border: 1px solid #cfd9e6;
-        border-radius: 8px;
-        background: linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%);
-        margin: 0.7rem 0 0.9rem 0;
-    }
-    .thesis h3 {margin: 0 0 0.35rem 0; font-size: 1.15rem;}
-    .thesis p {margin: 0; color: #344054; line-height: 1.45;}
-    .decision-card {
-        min-height: 148px;
-        padding: 0.95rem 1rem;
-        border: 1px solid #d8dee8;
-        border-radius: 8px;
-        background: #ffffff;
-        box-shadow: 0 1px 2px rgba(20, 32, 55, 0.04);
-    }
-    .decision-card h4 {margin: 0 0 0.35rem 0; font-size: 1rem;}
-    .decision-card p {margin: 0; color: #475467; line-height: 1.42;}
     .small-note {color: #5c6675; font-size: 0.92rem;}
     </style>
     """,
@@ -116,8 +97,6 @@ best_key = f"{best['model']}|threshold={best['neutral_threshold']}"
 best_details = unseen_details[best_key]
 overall = source_summary[source_summary["source"] == "ALL"].iloc[0]
 by_source = source_summary[source_summary["source"] != "ALL"].copy()
-highest_tone = by_source.sort_values("mean_tone_score", ascending=False).iloc[0]
-lowest_tone = by_source.sort_values("mean_tone_score", ascending=True).iloc[0]
 public_overall = public_platform[public_platform["platform"] == "ALL"].iloc[0]
 public_by_platform = public_platform[public_platform["platform"] != "ALL"].copy()
 
@@ -133,60 +112,6 @@ metric_cols[1].metric("Imported Articles", f"{counts.get('external_articles', 0)
 metric_cols[2].metric("Current Public Items", f"{int(public_overall['items']):,}")
 metric_cols[3].metric("Concerned Now", f"{public_overall['concerned_share']:.0%}")
 metric_cols[4].metric("Supportive Now", f"{public_overall['supportive_share']:.0%}")
-
-st.markdown(
-    f"""
-    <div class='takeaway'>
-    <b>Main message:</b> nuclear policy is not decided by facts alone. Public trust is shaped by the tone of stories people see:
-    safety risk, climate value, cost, waste, jobs, reliability, and national security. This project turns those narratives into measurable signals,
-    so advocates can see where support is strong, where concern is concentrated, and which messages need evidence.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    f"""
-    <div class='thesis'>
-    <h3>The case this analysis supports</h3>
-    <p>
-    Nuclear energy can be presented as a serious clean-power option, but the communication challenge is trust.
-    In this article collection, the overall tone is close to neutral, which means the public conversation is still movable.
-    The most favorable source signal is <b>{highest_tone['source']}</b>;
-    the most skeptical signal is <b>{lowest_tone['source']}</b>.
-    That spread is the decision opportunity: respond to concerns directly while making nuclear's reliability, safety record, and clean-energy role easier to understand.
-    </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-decision_cols = st.columns(3)
-decision_cards = [
-    (
-        "Why sentiment affects decisions",
-        "Permits, funding, and adoption move faster when the public hears a credible benefits story and sees risks handled transparently.",
-    ),
-    (
-        "What leaders should watch",
-        "Watch which concerns keep coming up, especially waste, safety, cost, and reactor risk; those are early warning signs for public resistance.",
-    ),
-    (
-        "How to use this",
-        "Build messages around clean reliability, cost realism, waste accountability, and local jobs instead of assuming the facts sell themselves.",
-    ),
-]
-for col, (title, body) in zip(decision_cols, decision_cards):
-    with col:
-        st.markdown(
-            f"""
-            <div class='decision-card'>
-            <h4>{title}</h4>
-            <p>{body}</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
 
 st.subheader("Public Opinion Now")
 st.markdown(
@@ -271,12 +196,11 @@ with public_right:
 
 st.markdown(
     f"""
-    <div class='takeaway'>
+    <div class='data-note'>
     <b>Current reading:</b> the accessible public conversation is concern-leaning right now:
     <b>{public_overall['concerned_share']:.0%}</b> concerned, <b>{public_overall['supportive_share']:.0%}</b> supportive,
     and <b>{public_overall['neutral_share']:.0%}</b> mixed/neutral. The most negative topic signal is
-    <b>{public_query.sort_values('mean_tone_score').iloc[0]['query']}</b>, so a pro-nuclear case should lead with transparent answers
-    on safety, waste, and reactor risk before moving to reliability and clean-energy benefits.
+    <b>{public_query.sort_values('mean_tone_score').iloc[0]['query']}</b>.
     </div>
     """,
     unsafe_allow_html=True,
@@ -337,25 +261,35 @@ st.markdown(
     unsafe_allow_html=True,
 )
 rank_view = unseen_ranking.copy()
-rank_view["run"] = rank_view["model"].str.replace("distilbert-base-uncased-finetuned-sst-2-english", "DistilBERT SST-2", regex=False)
-rank_view["run"] = rank_view["run"].str.replace("cardiffnlp/twitter-roberta-base-sentiment-latest", "Cardiff RoBERTa", regex=False)
-rank_view["run"] = rank_view["run"].str.replace("ProsusAI/finbert", "FinBERT", regex=False)
+rank_view["reader"] = rank_view["model"].str.replace(
+    "distilbert-base-uncased-finetuned-sst-2-english", "General article reader", regex=False
+)
+rank_view["reader"] = rank_view["reader"].str.replace(
+    "cardiffnlp/twitter-roberta-base-sentiment-latest", "Social media reader", regex=False
+)
+rank_view["reader"] = rank_view["reader"].str.replace("ProsusAI/finbert", "Finance-news reader", regex=False)
+rank_view["reader"] = rank_view["reader"].str.replace("ensemble_mean", "Combined readers", regex=False)
+best_by_reader = (
+    rank_view.sort_values(["accuracy", "macro_f1"], ascending=False)
+    .drop_duplicates("reader")
+    .sort_values("accuracy", ascending=False)
+)
 
 bench_chart = (
-    alt.Chart(rank_view)
-    .mark_circle(size=130, opacity=0.85)
+    alt.Chart(best_by_reader)
+    .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4)
     .encode(
-        x=alt.X("accuracy:Q", title="Correct classifications", scale=alt.Scale(domain=[0.2, 0.9])),
-        y=alt.Y("macro_f1:Q", title="Balance across viewpoints", scale=alt.Scale(domain=[0.2, 0.9])),
+        x=alt.X("reader:N", title=None, sort="-y", axis=alt.Axis(labelAngle=0)),
+        y=alt.Y("accuracy:Q", title="Correct classifications", axis=alt.Axis(format="%"), scale=alt.Scale(domain=[0, 0.9])),
         color=alt.Color(
-            "run:N",
+            "reader:N",
             scale=alt.Scale(range=["#2374ab", "#e15759", "#59a14f", "#7f6aad"]),
-            legend=alt.Legend(title=None, orient="bottom"),
+            legend=None,
         ),
         tooltip=[
-            alt.Tooltip("run:N", title="Run"),
+            alt.Tooltip("reader:N", title="Reader"),
             alt.Tooltip("accuracy:Q", title="Correct", format=".2%"),
-            alt.Tooltip("macro_f1:Q", title="Balance score", format=".3f"),
+            alt.Tooltip("balanced_accuracy:Q", title="Fair across groups", format=".2%"),
         ],
     )
     .properties(height=300)
@@ -391,28 +325,18 @@ with bench_left:
 with bench_right:
     st.altair_chart(confusion_chart + confusion_text, use_container_width=True)
 
-st.subheader("Reliability Results")
-display_cols = ["model", "neutral_threshold", "accuracy", "balanced_accuracy", "macro_f1", "weighted_f1"]
-evidence_table = unseen_ranking[display_cols].head(8).copy()
-evidence_table["model"] = evidence_table["model"].str.replace(
-    "distilbert-base-uncased-finetuned-sst-2-english", "General article reader", regex=False
-)
-evidence_table["model"] = evidence_table["model"].str.replace(
-    "cardiffnlp/twitter-roberta-base-sentiment-latest", "Social media reader", regex=False
-)
-evidence_table["model"] = evidence_table["model"].str.replace("ProsusAI/finbert", "Finance-news reader", regex=False)
+st.subheader("Reader Comparison")
+evidence_table = best_by_reader[["reader", "accuracy", "balanced_accuracy", "macro_f1"]].copy()
+evidence_table["Correct"] = evidence_table["accuracy"].map(lambda value: f"{value:.1%}")
+evidence_table["Fair Across Groups"] = evidence_table["balanced_accuracy"].map(lambda value: f"{value:.1%}")
+evidence_table["Overall Balance"] = evidence_table["macro_f1"].map(lambda value: f"{value:.3f}")
+evidence_table = evidence_table.rename(columns={"reader": "Reader Type"})[
+    ["Reader Type", "Correct", "Fair Across Groups", "Overall Balance"]
+]
 st.dataframe(
     evidence_table,
     use_container_width=True,
     hide_index=True,
-    column_config={
-        "model": "Reader Type",
-        "neutral_threshold": st.column_config.NumberColumn("Neutral Range", format="%.2f"),
-        "accuracy": st.column_config.NumberColumn("Correct", format="%.1%"),
-        "balanced_accuracy": st.column_config.NumberColumn("Fair Across Groups", format="%.1%"),
-        "macro_f1": st.column_config.NumberColumn("Balance Score", format="%.3f"),
-        "weighted_f1": st.column_config.NumberColumn("Overall Score", format="%.3f"),
-    },
 )
 
 st.subheader("Most Extreme Original Articles")
