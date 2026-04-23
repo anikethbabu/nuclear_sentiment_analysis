@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import re
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import altair as alt
@@ -14,6 +16,126 @@ DB_PATH = ROOT / "nuclear.db"
 TONE_DIR = ROOT / "models" / "tone"
 UNSEEN_DIR = ROOT / "models" / "unseen_eval"
 PUBLIC_DIR = ROOT / "models" / "public_now"
+STOPWORDS = {
+    "about",
+    "after",
+    "again",
+    "against",
+    "also",
+    "and",
+    "are",
+    "because",
+    "been",
+    "being",
+    "but",
+    "can",
+    "could",
+    "com",
+    "department",
+    "first",
+    "for",
+    "from",
+    "gov",
+    "has",
+    "have",
+    "here",
+    "html",
+    "https",
+    "into",
+    "its",
+    "just",
+    "like",
+    "more",
+    "most",
+    "nbsp",
+    "new",
+    "news",
+    "not",
+    "now",
+    "nuclear",
+    "only",
+    "over",
+    "power",
+    "said",
+    "says",
+    "some",
+    "than",
+    "that",
+    "the",
+    "their",
+    "they",
+    "these",
+    "this",
+    "through",
+    "time",
+    "what",
+    "when",
+    "which",
+    "with",
+    "will",
+    "world",
+    "would",
+    "www",
+    "year",
+    "years",
+    "you",
+}
+PUBLIC_THEME_TERMS = {
+    "accident",
+    "accidents",
+    "advanced",
+    "baseload",
+    "batteries",
+    "battery",
+    "carbon",
+    "chernobyl",
+    "climate",
+    "coal",
+    "construction",
+    "cost",
+    "costs",
+    "demand",
+    "delays",
+    "emissions",
+    "energy",
+    "expensive",
+    "fossil",
+    "fuel",
+    "future",
+    "fukushima",
+    "gas",
+    "grid",
+    "jobs",
+    "meltdown",
+    "mining",
+    "modular",
+    "plant",
+    "plants",
+    "policy",
+    "radiation",
+    "reactor",
+    "reactors",
+    "regulation",
+    "reliability",
+    "reliable",
+    "renewable",
+    "renewables",
+    "risk",
+    "risks",
+    "safe",
+    "safety",
+    "small",
+    "solar",
+    "storage",
+    "subsidies",
+    "subsidy",
+    "thorium",
+    "uranium",
+    "waste",
+    "water",
+    "weapons",
+    "wind",
+}
 
 
 st.set_page_config(page_title="Nuclear Article Tone Brief", layout="wide")
@@ -80,10 +202,48 @@ def load_public_now() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return platform, query, items
 
 
+@st.cache_data(show_spinner=False)
+def build_public_theme_table(items: pd.DataFrame) -> pd.DataFrame:
+    counts: Counter[str] = Counter()
+    tone_totals: defaultdict[str, float] = defaultdict(float)
+    stance_totals: defaultdict[str, Counter[str]] = defaultdict(Counter)
+
+    for row in items.itertuples(index=False):
+        text = f"{getattr(row, 'title', '')} {getattr(row, 'text', '')}".lower()
+        tokens = [
+            token
+            for token in re.findall(r"[a-z][a-z-]{2,}", text)
+            if token in PUBLIC_THEME_TERMS and token not in STOPWORDS and len(token) > 3
+        ]
+        unique_tokens = set(tokens)
+        for token in unique_tokens:
+            counts[token] += 1
+            tone_totals[token] += float(row.tone_score)
+            stance_totals[token][row.predicted_public_stance] += 1
+
+    rows = []
+    for term, mentions in counts.most_common(60):
+        if mentions < 4:
+            continue
+        stance_counts = stance_totals[term]
+        rows.append(
+            {
+                "term": term,
+                "mentions": mentions,
+                "average_tone": tone_totals[term] / mentions,
+                "supportive": stance_counts.get("supportive", 0),
+                "concerned": stance_counts.get("concerned", 0),
+                "mixed_neutral": stance_counts.get("mixed_or_neutral", 0),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 counts = load_db_counts()
 source_counts = load_sources()
 article_scores, source_summary, unseen_ranking, unseen_details = load_outputs()
 public_platform, public_query, public_items = load_public_now()
+public_themes = build_public_theme_table(public_items)
 
 best = unseen_ranking.iloc[0]
 best_key = f"{best['model']}|threshold={best['neutral_threshold']}"
@@ -175,6 +335,65 @@ with public_left:
     st.altair_chart(stance_chart, use_container_width=True)
 with public_right:
     st.altair_chart(query_chart, use_container_width=True)
+
+st.subheader("Public Themes")
+theme_left, theme_right = st.columns([1.05, 0.95])
+top_themes = public_themes.head(18).copy()
+theme_mentions_chart = (
+    alt.Chart(top_themes)
+    .mark_bar(cornerRadiusTopRight=4, cornerRadiusBottomRight=4)
+    .encode(
+        y=alt.Y("term:N", sort="-x", title="Word or theme"),
+        x=alt.X("mentions:Q", title="Mentions"),
+        color=alt.Color(
+            "average_tone:Q",
+            scale=alt.Scale(domain=[-0.8, 0, 0.5], range=["#b64242", "#8b98a8", "#2374ab"]),
+            legend=alt.Legend(title="Tone"),
+        ),
+        tooltip=[
+            alt.Tooltip("term:N", title="Theme"),
+            alt.Tooltip("mentions:Q", title="Mentions"),
+            alt.Tooltip("average_tone:Q", title="Average tone", format=".3f"),
+            alt.Tooltip("supportive:Q", title="Supportive"),
+            alt.Tooltip("concerned:Q", title="Concerned"),
+            alt.Tooltip("mixed_neutral:Q", title="Mixed/neutral"),
+        ],
+    )
+    .properties(height=390)
+)
+
+tone_terms = public_themes.sort_values("average_tone").copy()
+tone_terms = pd.concat(
+    [
+        tone_terms.head(7).assign(group="More concerned context"),
+        tone_terms.tail(7).sort_values("average_tone", ascending=False).assign(group="More supportive context"),
+    ],
+    ignore_index=True,
+)
+theme_tone_chart = (
+    alt.Chart(tone_terms)
+    .mark_bar(cornerRadiusTopRight=4, cornerRadiusBottomRight=4)
+    .encode(
+        y=alt.Y("term:N", sort="-x", title="Theme"),
+        x=alt.X("average_tone:Q", title="Average tone", scale=alt.Scale(domain=[-1, 1])),
+        color=alt.Color(
+            "group:N",
+            scale=alt.Scale(domain=["More supportive context", "More concerned context"], range=["#2374ab", "#b64242"]),
+            legend=alt.Legend(title=None, orient="bottom"),
+        ),
+        tooltip=[
+            alt.Tooltip("term:N", title="Theme"),
+            alt.Tooltip("mentions:Q", title="Mentions"),
+            alt.Tooltip("average_tone:Q", title="Average tone", format=".3f"),
+        ],
+    )
+    .properties(height=390)
+)
+
+with theme_left:
+    st.altair_chart(theme_mentions_chart, use_container_width=True)
+with theme_right:
+    st.altair_chart(theme_tone_chart, use_container_width=True)
 
 left, right = st.columns([1.15, 0.85])
 
