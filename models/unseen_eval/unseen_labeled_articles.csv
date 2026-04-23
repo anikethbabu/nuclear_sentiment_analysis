@@ -1,0 +1,51 @@
+article_id,source,filename,label,word_count
+"ANS::Constellation, Meta sign 20-year deal to source entire Illinois nuclear plant’s power.txt",ANS,"Constellation, Meta sign 20-year deal to source entire Illinois nuclear plant’s power.txt",Negative,861
+ANS::Deep Isolation asks states to include waste disposal in their nuclear strategy.txt,ANS,Deep Isolation asks states to include waste disposal in their nuclear strategy.txt,Negative,515
+"ANS::Delivering new nuclear on time, the first time.txt",ANS,"Delivering new nuclear on time, the first time.txt",Negative,532
+"ANS::FPoliSolutions demonstrates RISE, an RIPB systems engineering tool.txt",ANS,"FPoliSolutions demonstrates RISE, an RIPB systems engineering tool.txt",Negative,527
+"ANS::From Capitol Hill Nuclear is back, critical for America’s energy future.txt",ANS,"From Capitol Hill Nuclear is back, critical for America’s energy future.txt",Positive,579
+ANS::NNSA to conduct NEPA review of plutonium pit production.txt,ANS,NNSA to conduct NEPA review of plutonium pit production.txt,Negative,413
+ANS::Nuclear advocates fight potential cuts at DOE’s Loan Programs Office.txt,ANS,Nuclear advocates fight potential cuts at DOE’s Loan Programs Office.txt,Negative,586
+ANS::On moving fast and breaking things.txt,ANS,On moving fast and breaking things.txt,Positive,708
+ANS::The RAIN scale A good intention that falls short.txt,ANS,The RAIN scale A good intention that falls short.txt,Negative,1382
+World Nuclear::1000-gigawatts-of-new-nuclear-capacity-will-suppor.txt,World Nuclear,1000-gigawatts-of-new-nuclear-capacity-will-suppor.txt,Positive,384
+World Nuclear::action-is-needed-to-expand-the-share-of-nuclear.txt,World Nuclear,action-is-needed-to-expand-the-share-of-nuclear.txt,Positive,431
+World Nuclear::asia-needs-nuclear-energy-to-supply-clean-and-reli.txt,World Nuclear,asia-needs-nuclear-energy-to-supply-clean-and-reli.txt,Positive,326
+World Nuclear::at-iaea-conference-nuclear-industry-says-it-is-re.txt,World Nuclear,at-iaea-conference-nuclear-industry-says-it-is-re.txt,Neutral,584
+World Nuclear::austrian-nuclear-objection-undermines-right-of-ene.txt,World Nuclear,austrian-nuclear-objection-undermines-right-of-ene.txt,Negative,321
+World Nuclear::barriers-to-nuclear-generation-must-be-removed.txt,World Nuclear,barriers-to-nuclear-generation-must-be-removed.txt,Neutral,490
+World Nuclear::bringing-global-ambition-to-theadvanced-reactors-summitxiii.txt,World Nuclear,bringing-global-ambition-to-theadvanced-reactors-summitxiii.txt,Positive,720
+World Nuclear::climate-leaders-need-nuclear-energy-to-achieve-net.txt,World Nuclear,climate-leaders-need-nuclear-energy-to-achieve-net.txt,Positive,315
+World Nuclear::combatting-climate-change-faster-with-new-nuclear.txt,World Nuclear,combatting-climate-change-faster-with-new-nuclear.txt,Negative,756
+World Nuclear::cop-22-must-enable-paris-agreement-objectives-to-b.txt,World Nuclear,cop-22-must-enable-paris-agreement-objectives-to-b.txt,Negative,296
+World Nuclear::energizing-development-clean-air-and-energy-transition.txt,World Nuclear,energizing-development-clean-air-and-energy-transition.txt,Positive,107
+World Nuclear::g7-pledges-to-accelerate-progress-on-nuclear-for-d.txt,World Nuclear,g7-pledges-to-accelerate-progress-on-nuclear-for-d.txt,Positive,267
+World Nuclear::global-nuclear-industry-gathers-in-poland-to-mobilize-2tn-supply-chain-opportunity.txt,World Nuclear,global-nuclear-industry-gathers-in-poland-to-mobilize-2tn-supply-chain-opportunity.txt,Positive,435
+World Nuclear::global-trade-tensions-understanding-the-impact-of-tariffs-on-the-nuclear-industry.txt,World Nuclear,global-trade-tensions-understanding-the-impact-of-tariffs-on-the-nuclear-industry.txt,Positive,421
+World Nuclear::governments-recovery-programmes-should-invest-in-n.txt,World Nuclear,governments-recovery-programmes-should-invest-in-n.txt,Negative,389
+World Nuclear::iea-nuclear-generation-to-double-to-meet-sustainab.txt,World Nuclear,iea-nuclear-generation-to-double-to-meet-sustainab.txt,Negative,286
+World Nuclear::iea-says-nuclear-is-needed-to-achieve-sustainable.txt,World Nuclear,iea-says-nuclear-is-needed-to-achieve-sustainable.txt,Neutral,426
+World Nuclear::india-energyweek-2026-indias-acceleration-towards-newnuclear-energy-capacity.txt,World Nuclear,india-energyweek-2026-indias-acceleration-towards-newnuclear-energy-capacity.txt,Positive,1025
+World Nuclear::invest-in-nuclear-to-succeed-in-the-post-covid-rec.txt,World Nuclear,invest-in-nuclear-to-succeed-in-the-post-covid-rec.txt,Neutral,418
+World Nuclear::markets-must-recognise-energy-benefits.txt,World Nuclear,markets-must-recognise-energy-benefits.txt,Negative,195
+World Nuclear::new-outlookreportfindsgovernments-nuclear-energyambitionexceeds-tripling-goal-for-2050.txt,World Nuclear,new-outlookreportfindsgovernments-nuclear-energyambitionexceeds-tripling-goal-for-2050.txt,Neutral,656
+World Nuclear::new-report-nuclear-power-economics-and-project-str.txt,World Nuclear,new-report-nuclear-power-economics-and-project-str.txt,Negative,448
+World Nuclear::new-reports-highlight-nuclear-power-as-a-key-pilla.txt,World Nuclear,new-reports-highlight-nuclear-power-as-a-key-pilla.txt,Neutral,424
+World Nuclear::nuclear-energy-is-the-fast-track-to-decarbonizatio.txt,World Nuclear,nuclear-energy-is-the-fast-track-to-decarbonizatio.txt,Positive,447
+World Nuclear::nuclear-generation-increases-for-fifth-successive.txt,World Nuclear,nuclear-generation-increases-for-fifth-successive.txt,Negative,283
+World Nuclear::nuclear-key-to-a-clean-energy-future-iea-world-ene.txt,World Nuclear,nuclear-key-to-a-clean-energy-future-iea-world-ene.txt,Negative,406
+World Nuclear::nuclear-must-be-part-of-the-international-response.txt,World Nuclear,nuclear-must-be-part-of-the-international-response.txt,Positive,398
+World Nuclear::nuclear’s-contribution-to-global-climate-change-mi.txt,World Nuclear,nuclear’s-contribution-to-global-climate-change-mi.txt,Neutral,461
+World Nuclear::policies-on-nuclear-plant-are-failing-the-environm.txt,World Nuclear,policies-on-nuclear-plant-are-failing-the-environm.txt,Neutral,497
+World Nuclear::resilient-nuclear-generation-ensures-reliable-elec.txt,World Nuclear,resilient-nuclear-generation-ensures-reliable-elec.txt,Neutral,459
+World Nuclear::statement-from-world-nuclear-association-on-recent.txt,World Nuclear,statement-from-world-nuclear-association-on-recent.txt,Positive,232
+World Nuclear::swiss-nuclear-referendum-result-is-pro-science-and.txt,World Nuclear,swiss-nuclear-referendum-result-is-pro-science-and.txt,Positive,346
+World Nuclear::tripling-global-nuclear-energy-by-2050-within-reach-if-governments-act-now.txt,World Nuclear,tripling-global-nuclear-energy-by-2050-within-reach-if-governments-act-now.txt,Neutral,736
+World Nuclear::world-nuclear-association-calls-for-all-hazards-ap.txt,World Nuclear,world-nuclear-association-calls-for-all-hazards-ap.txt,Negative,355
+World Nuclear::world-nuclear-association-issues-joint-communique-at-roadmaps-to-new-nuclear-19-september-2024.txt,World Nuclear,world-nuclear-association-issues-joint-communique-at-roadmaps-to-new-nuclear-19-september-2024.txt,Positive,539
+World Nuclear::world-nuclear-association-response-to-the-internat.txt,World Nuclear,world-nuclear-association-response-to-the-internat.txt,Negative,1226
+World Nuclear::world-nuclear-performance-report-2023-highlights-n.txt,World Nuclear,world-nuclear-performance-report-2023-highlights-n.txt,Negative,255
+World Nuclear::world-nuclear-performance-report-2024-highlights-increase-in-global-reactor-generation-performance-20-august-2024.txt,World Nuclear,world-nuclear-performance-report-2024-highlights-increase-in-global-reactor-generation-performance-20-august-2024.txt,Positive,556
+World Nuclear::world-nuclear-performance-to-be-highlighted-at-ann.txt,World Nuclear,world-nuclear-performance-to-be-highlighted-at-ann.txt,Negative,367
+World Nuclear::world-nuclear-supply-chain-2025-what-to-expect-who-to-watch.txt,World Nuclear,world-nuclear-supply-chain-2025-what-to-expect-who-to-watch.txt,Positive,1362
+World Nuclear::﻿world-nuclear-performance-report-2019-launched.txt,World Nuclear,﻿world-nuclear-performance-report-2019-launched.txt,Positive,430

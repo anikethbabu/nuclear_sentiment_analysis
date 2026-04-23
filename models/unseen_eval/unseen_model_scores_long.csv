@@ -1,0 +1,151 @@
+article_id,model,tone_score,confidence_mean,chunks_scored
+"ANS::Constellation, Meta sign 20-year deal to source entire Illinois nuclear plant’s power.txt",distilbert-base-uncased-finetuned-sst-2-english,0.33832240104675293,0.9941119352976481,3
+ANS::Deep Isolation asks states to include waste disposal in their nuclear strategy.txt,distilbert-base-uncased-finetuned-sst-2-english,0.001792997121810913,0.9768716990947723,2
+"ANS::Delivering new nuclear on time, the first time.txt",distilbert-base-uncased-finetuned-sst-2-english,0.03610929846763611,0.9626881182193756,2
+"ANS::FPoliSolutions demonstrates RISE, an RIPB systems engineering tool.txt",distilbert-base-uncased-finetuned-sst-2-english,0.05603140592575073,0.8415201306343079,2
+"ANS::From Capitol Hill Nuclear is back, critical for America’s energy future.txt",distilbert-base-uncased-finetuned-sst-2-english,0.8880794048309326,0.8880794048309326,2
+ANS::NNSA to conduct NEPA review of plutonium pit production.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.977672666311264,0.977672666311264,2
+ANS::Nuclear advocates fight potential cuts at DOE’s Loan Programs Office.txt,distilbert-base-uncased-finetuned-sst-2-english,0.0009756982326507568,0.994566410779953,2
+ANS::On moving fast and breaking things.txt,distilbert-base-uncased-finetuned-sst-2-english,0.17663681507110596,0.7312282919883728,2
+ANS::The RAIN scale A good intention that falls short.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.999388799071312,0.999388799071312,4
+World Nuclear::1000-gigawatts-of-new-nuclear-capacity-will-suppor.txt,distilbert-base-uncased-finetuned-sst-2-english,0.97806715965271,0.97806715965271,1
+World Nuclear::action-is-needed-to-expand-the-share-of-nuclear.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9982132911682129,0.9982132911682129,2
+World Nuclear::asia-needs-nuclear-energy-to-supply-clean-and-reli.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9915517568588257,0.9915517568588257,1
+World Nuclear::at-iaea-conference-nuclear-industry-says-it-is-re.txt,distilbert-base-uncased-finetuned-sst-2-english,0.019125133752822876,0.9703588783740997,2
+World Nuclear::austrian-nuclear-objection-undermines-right-of-ene.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9873784184455872,0.9873784184455872,1
+World Nuclear::barriers-to-nuclear-generation-must-be-removed.txt,distilbert-base-uncased-finetuned-sst-2-english,0.003429591655731201,0.9908517003059387,2
+World Nuclear::bringing-global-ambition-to-theadvanced-reactors-summitxiii.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9970450699329376,0.9970450699329376,2
+World Nuclear::climate-leaders-need-nuclear-energy-to-achieve-net.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9929785132408142,0.9929785132408142,1
+World Nuclear::combatting-climate-change-faster-with-new-nuclear.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9886307120323181,0.9886307120323181,3
+World Nuclear::cop-22-must-enable-paris-agreement-objectives-to-b.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.5826815962791443,0.5826815962791443,1
+World Nuclear::energizing-development-clean-air-and-energy-transition.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9737541675567627,0.9737541675567627,1
+World Nuclear::g7-pledges-to-accelerate-progress-on-nuclear-for-d.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9643544554710388,0.9643544554710388,1
+World Nuclear::global-nuclear-industry-gathers-in-poland-to-mobilize-2tn-supply-chain-opportunity.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9983324706554413,0.9983324706554413,2
+World Nuclear::global-trade-tensions-understanding-the-impact-of-tariffs-on-the-nuclear-industry.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9917038977146149,0.9917038977146149,2
+World Nuclear::governments-recovery-programmes-should-invest-in-n.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9089752435684204,0.9089752435684204,1
+World Nuclear::iea-nuclear-generation-to-double-to-meet-sustainab.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.6994996070861816,0.6994996070861816,1
+World Nuclear::iea-says-nuclear-is-needed-to-achieve-sustainable.txt,distilbert-base-uncased-finetuned-sst-2-english,0.007458090782165527,0.9917470812797546,2
+World Nuclear::india-energyweek-2026-indias-acceleration-towards-newnuclear-energy-capacity.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9953074256579081,0.9953074256579081,3
+World Nuclear::invest-in-nuclear-to-succeed-in-the-post-covid-rec.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.0008245408535003662,0.9955734312534332,2
+World Nuclear::markets-must-recognise-energy-benefits.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9964351654052734,0.9964351654052734,1
+World Nuclear::new-outlookreportfindsgovernments-nuclear-energyambitionexceeds-tripling-goal-for-2050.txt,distilbert-base-uncased-finetuned-sst-2-english,0.006741553544998169,0.9848765432834625,2
+World Nuclear::new-report-nuclear-power-economics-and-project-str.txt,distilbert-base-uncased-finetuned-sst-2-english,0.0002873241901397705,0.9962291419506073,2
+World Nuclear::new-reports-highlight-nuclear-power-as-a-key-pilla.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9914641380310059,0.9914641380310059,2
+World Nuclear::nuclear-energy-is-the-fast-track-to-decarbonizatio.txt,distilbert-base-uncased-finetuned-sst-2-english,0.02501082420349121,0.5804657340049744,2
+World Nuclear::nuclear-generation-increases-for-fifth-successive.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.950788676738739,0.950788676738739,1
+World Nuclear::nuclear-key-to-a-clean-energy-future-iea-world-ene.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.8507622480392456,0.8507622480392456,2
+World Nuclear::nuclear-must-be-part-of-the-international-response.txt,distilbert-base-uncased-finetuned-sst-2-english,0.6391282081604004,0.6391282081604004,1
+World Nuclear::nuclear’s-contribution-to-global-climate-change-mi.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.01875150203704834,0.9572362899780273,2
+World Nuclear::policies-on-nuclear-plant-are-failing-the-environm.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9987849593162537,0.9987849593162537,2
+World Nuclear::resilient-nuclear-generation-ensures-reliable-elec.txt,distilbert-base-uncased-finetuned-sst-2-english,0.012369871139526367,0.9816501140594482,2
+World Nuclear::statement-from-world-nuclear-association-on-recent.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9931291937828064,0.9931291937828064,1
+World Nuclear::swiss-nuclear-referendum-result-is-pro-science-and.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9839808344841003,0.9839808344841003,1
+World Nuclear::tripling-global-nuclear-energy-by-2050-within-reach-if-governments-act-now.txt,distilbert-base-uncased-finetuned-sst-2-english,0.011380136013031006,0.9767218232154846,2
+World Nuclear::world-nuclear-association-calls-for-all-hazards-ap.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.6708827614784241,0.6708827614784241,1
+World Nuclear::world-nuclear-association-issues-joint-communique-at-roadmaps-to-new-nuclear-19-september-2024.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9976676106452942,0.9976676106452942,2
+World Nuclear::world-nuclear-association-response-to-the-internat.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.4567462205886841,0.9553286135196686,4
+World Nuclear::world-nuclear-performance-report-2023-highlights-n.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.8598103523254395,0.8598103523254395,1
+World Nuclear::world-nuclear-performance-report-2024-highlights-increase-in-global-reactor-generation-performance-20-august-2024.txt,distilbert-base-uncased-finetuned-sst-2-english,0.9065996408462524,0.9065996408462524,2
+World Nuclear::world-nuclear-performance-to-be-highlighted-at-ann.txt,distilbert-base-uncased-finetuned-sst-2-english,-0.9831070899963379,0.9831070899963379,1
+World Nuclear::world-nuclear-supply-chain-2025-what-to-expect-who-to-watch.txt,distilbert-base-uncased-finetuned-sst-2-english,0.5047892928123474,0.9918839633464813,4
+World Nuclear::﻿world-nuclear-performance-report-2019-launched.txt,distilbert-base-uncased-finetuned-sst-2-english,0.2162919044494629,0.7829355001449585,2
+"ANS::Constellation, Meta sign 20-year deal to source entire Illinois nuclear plant’s power.txt",ProsusAI/finbert,0.5565875569979349,0.7518279949824015,3
+ANS::Deep Isolation asks states to include waste disposal in their nuclear strategy.txt,ProsusAI/finbert,0.0,0.76676806807518,2
+"ANS::Delivering new nuclear on time, the first time.txt",ProsusAI/finbert,0.0,0.6054889857769012,2
+"ANS::FPoliSolutions demonstrates RISE, an RIPB systems engineering tool.txt",ProsusAI/finbert,0.0,0.7923535108566284,2
+"ANS::From Capitol Hill Nuclear is back, critical for America’s energy future.txt",ProsusAI/finbert,0.0,0.6669085919857025,2
+ANS::NNSA to conduct NEPA review of plutonium pit production.txt,ProsusAI/finbert,0.0,0.9139351844787598,2
+ANS::Nuclear advocates fight potential cuts at DOE’s Loan Programs Office.txt,ProsusAI/finbert,-0.47971147298812866,0.8290635347366333,2
+ANS::On moving fast and breaking things.txt,ProsusAI/finbert,0.0,0.8605961799621582,2
+ANS::The RAIN scale A good intention that falls short.txt,ProsusAI/finbert,0.0,0.9009871482849121,4
+World Nuclear::1000-gigawatts-of-new-nuclear-capacity-will-suppor.txt,ProsusAI/finbert,0.0,0.7385811805725098,1
+World Nuclear::action-is-needed-to-expand-the-share-of-nuclear.txt,ProsusAI/finbert,0.3710451126098633,0.705329567193985,2
+World Nuclear::asia-needs-nuclear-energy-to-supply-clean-and-reli.txt,ProsusAI/finbert,0.0,0.6625760793685913,1
+World Nuclear::at-iaea-conference-nuclear-industry-says-it-is-re.txt,ProsusAI/finbert,-0.3621669113636017,0.6943004727363586,2
+World Nuclear::austrian-nuclear-objection-undermines-right-of-ene.txt,ProsusAI/finbert,0.0,0.8966698050498962,1
+World Nuclear::barriers-to-nuclear-generation-must-be-removed.txt,ProsusAI/finbert,0.0,0.830780416727066,2
+World Nuclear::bringing-global-ambition-to-theadvanced-reactors-summitxiii.txt,ProsusAI/finbert,0.6665340960025787,0.6665340960025787,2
+World Nuclear::climate-leaders-need-nuclear-energy-to-achieve-net.txt,ProsusAI/finbert,0.0,0.8884697556495667,1
+World Nuclear::combatting-climate-change-faster-with-new-nuclear.txt,ProsusAI/finbert,0.0,0.8134506543477377,3
+World Nuclear::cop-22-must-enable-paris-agreement-objectives-to-b.txt,ProsusAI/finbert,0.0,0.6852436661720276,1
+World Nuclear::energizing-development-clean-air-and-energy-transition.txt,ProsusAI/finbert,0.689480185508728,0.689480185508728,1
+World Nuclear::g7-pledges-to-accelerate-progress-on-nuclear-for-d.txt,ProsusAI/finbert,0.0,0.7034631967544556,1
+World Nuclear::global-nuclear-industry-gathers-in-poland-to-mobilize-2tn-supply-chain-opportunity.txt,ProsusAI/finbert,0.39958280324935913,0.6512546837329865,2
+World Nuclear::global-trade-tensions-understanding-the-impact-of-tariffs-on-the-nuclear-industry.txt,ProsusAI/finbert,0.0,0.8103243112564087,2
+World Nuclear::governments-recovery-programmes-should-invest-in-n.txt,ProsusAI/finbert,0.0,0.7238652110099792,1
+World Nuclear::iea-nuclear-generation-to-double-to-meet-sustainab.txt,ProsusAI/finbert,0.8383926153182983,0.8383926153182983,1
+World Nuclear::iea-says-nuclear-is-needed-to-achieve-sustainable.txt,ProsusAI/finbert,0.3630591034889221,0.6961100995540619,2
+World Nuclear::india-energyweek-2026-indias-acceleration-towards-newnuclear-energy-capacity.txt,ProsusAI/finbert,0.4700778325398763,0.6633129318555196,3
+World Nuclear::invest-in-nuclear-to-succeed-in-the-post-covid-rec.txt,ProsusAI/finbert,0.34453320503234863,0.7897903323173523,2
+World Nuclear::markets-must-recognise-energy-benefits.txt,ProsusAI/finbert,0.0,0.7647984623908997,1
+World Nuclear::new-outlookreportfindsgovernments-nuclear-energyambitionexceeds-tripling-goal-for-2050.txt,ProsusAI/finbert,0.34170833230018616,0.7213050723075867,2
+World Nuclear::new-report-nuclear-power-economics-and-project-str.txt,ProsusAI/finbert,-0.4303477704524994,0.8413834571838379,2
+World Nuclear::new-reports-highlight-nuclear-power-as-a-key-pilla.txt,ProsusAI/finbert,0.27452552318573,0.7239316701889038,2
+World Nuclear::nuclear-energy-is-the-fast-track-to-decarbonizatio.txt,ProsusAI/finbert,0.0,0.8292446434497833,2
+World Nuclear::nuclear-generation-increases-for-fifth-successive.txt,ProsusAI/finbert,0.0,0.650144100189209,1
+World Nuclear::nuclear-key-to-a-clean-energy-future-iea-world-ene.txt,ProsusAI/finbert,0.256034791469574,0.7213662266731262,2
+World Nuclear::nuclear-must-be-part-of-the-international-response.txt,ProsusAI/finbert,0.0,0.5830627679824829,1
+World Nuclear::nuclear’s-contribution-to-global-climate-change-mi.txt,ProsusAI/finbert,0.0,0.8692643046379089,2
+World Nuclear::policies-on-nuclear-plant-are-failing-the-environm.txt,ProsusAI/finbert,-0.4721023440361023,0.9212954342365265,2
+World Nuclear::resilient-nuclear-generation-ensures-reliable-elec.txt,ProsusAI/finbert,-0.3492514491081238,0.7829643487930298,2
+World Nuclear::statement-from-world-nuclear-association-on-recent.txt,ProsusAI/finbert,0.0,0.8425960540771484,1
+World Nuclear::swiss-nuclear-referendum-result-is-pro-science-and.txt,ProsusAI/finbert,0.0,0.6415737867355347,1
+World Nuclear::tripling-global-nuclear-energy-by-2050-within-reach-if-governments-act-now.txt,ProsusAI/finbert,0.0,0.6386262774467468,2
+World Nuclear::world-nuclear-association-calls-for-all-hazards-ap.txt,ProsusAI/finbert,0.0,0.851210355758667,1
+World Nuclear::world-nuclear-association-issues-joint-communique-at-roadmaps-to-new-nuclear-19-september-2024.txt,ProsusAI/finbert,0.5072727799415588,0.5072727799415588,2
+World Nuclear::world-nuclear-association-response-to-the-internat.txt,ProsusAI/finbert,0.17205531895160675,0.6864313632249832,4
+World Nuclear::world-nuclear-performance-report-2023-highlights-n.txt,ProsusAI/finbert,-0.896236777305603,0.896236777305603,1
+World Nuclear::world-nuclear-performance-report-2024-highlights-increase-in-global-reactor-generation-performance-20-august-2024.txt,ProsusAI/finbert,0.415844202041626,0.8371483087539673,2
+World Nuclear::world-nuclear-performance-to-be-highlighted-at-ann.txt,ProsusAI/finbert,0.0,0.843197762966156,1
+World Nuclear::world-nuclear-supply-chain-2025-what-to-expect-who-to-watch.txt,ProsusAI/finbert,0.0,0.8525085747241974,4
+World Nuclear::﻿world-nuclear-performance-report-2019-launched.txt,ProsusAI/finbert,0.2839869260787964,0.5974740982055664,2
+"ANS::Constellation, Meta sign 20-year deal to source entire Illinois nuclear plant’s power.txt",cardiffnlp/twitter-roberta-base-sentiment-latest,0.5663273135821024,0.7674638827641805,3
+ANS::Deep Isolation asks states to include waste disposal in their nuclear strategy.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.8961471617221832,2
+"ANS::Delivering new nuclear on time, the first time.txt",cardiffnlp/twitter-roberta-base-sentiment-latest,0.5843473672866821,0.5843473672866821,2
+"ANS::FPoliSolutions demonstrates RISE, an RIPB systems engineering tool.txt",cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6416081041097641,2
+"ANS::From Capitol Hill Nuclear is back, critical for America’s energy future.txt",cardiffnlp/twitter-roberta-base-sentiment-latest,0.310630202293396,0.7250947058200836,2
+ANS::NNSA to conduct NEPA review of plutonium pit production.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.8976943492889404,1
+ANS::Nuclear advocates fight potential cuts at DOE’s Loan Programs Office.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5235376209020615,2
+ANS::On moving fast and breaking things.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.703322172164917,2
+ANS::The RAIN scale A good intention that falls short.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,-0.12451406568288803,0.6486893817782402,4
+World Nuclear::1000-gigawatts-of-new-nuclear-capacity-will-suppor.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6173604130744934,1
+World Nuclear::action-is-needed-to-expand-the-share-of-nuclear.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.3108197748661041,0.6750675141811371,2
+World Nuclear::asia-needs-nuclear-energy-to-supply-clean-and-reli.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5426585674285889,1
+World Nuclear::at-iaea-conference-nuclear-industry-says-it-is-re.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6632130742073059,2
+World Nuclear::austrian-nuclear-objection-undermines-right-of-ene.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5563209652900696,1
+World Nuclear::barriers-to-nuclear-generation-must-be-removed.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.2543739378452301,0.6997497379779816,2
+World Nuclear::bringing-global-ambition-to-theadvanced-reactors-summitxiii.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.3687174320220947,0.6394421458244324,2
+World Nuclear::climate-leaders-need-nuclear-energy-to-achieve-net.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.7693672180175781,1
+World Nuclear::combatting-climate-change-faster-with-new-nuclear.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.7186019023259481,3
+World Nuclear::cop-22-must-enable-paris-agreement-objectives-to-b.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.7370019555091858,1
+World Nuclear::energizing-development-clean-air-and-energy-transition.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.5918705463409424,0.5918705463409424,1
+World Nuclear::g7-pledges-to-accelerate-progress-on-nuclear-for-d.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.553681492805481,1
+World Nuclear::global-nuclear-industry-gathers-in-poland-to-mobilize-2tn-supply-chain-opportunity.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.878273218870163,0.878273218870163,2
+World Nuclear::global-trade-tensions-understanding-the-impact-of-tariffs-on-the-nuclear-industry.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.2514086067676544,0.6651456654071808,2
+World Nuclear::governments-recovery-programmes-should-invest-in-n.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6784945130348206,1
+World Nuclear::iea-nuclear-generation-to-double-to-meet-sustainab.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5151132941246033,1
+World Nuclear::iea-says-nuclear-is-needed-to-achieve-sustainable.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5860477089881897,2
+World Nuclear::india-energyweek-2026-indias-acceleration-towards-newnuclear-energy-capacity.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.5184040466944376,0.7441287438074747,3
+World Nuclear::invest-in-nuclear-to-succeed-in-the-post-covid-rec.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6846541166305542,2
+World Nuclear::markets-must-recognise-energy-benefits.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.759933590888977,1
+World Nuclear::new-outlookreportfindsgovernments-nuclear-energyambitionexceeds-tripling-goal-for-2050.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.5928863286972046,0.5928863286972046,2
+World Nuclear::new-report-nuclear-power-economics-and-project-str.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6445631086826324,2
+World Nuclear::new-reports-highlight-nuclear-power-as-a-key-pilla.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6382171511650085,2
+World Nuclear::nuclear-energy-is-the-fast-track-to-decarbonizatio.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6478871703147888,2
+World Nuclear::nuclear-generation-increases-for-fifth-successive.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5211750268936157,1
+World Nuclear::nuclear-key-to-a-clean-energy-future-iea-world-ene.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.787958174943924,2
+World Nuclear::nuclear-must-be-part-of-the-international-response.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5755242109298706,1
+World Nuclear::nuclear’s-contribution-to-global-climate-change-mi.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.247187077999115,0.6354276537895203,2
+World Nuclear::policies-on-nuclear-plant-are-failing-the-environm.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,-0.2762426435947418,0.5909142792224884,2
+World Nuclear::resilient-nuclear-generation-ensures-reliable-elec.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.7796920537948608,2
+World Nuclear::statement-from-world-nuclear-association-on-recent.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,-0.5004094243049622,0.5004094243049622,1
+World Nuclear::swiss-nuclear-referendum-result-is-pro-science-and.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.6485503315925598,0.6485503315925598,1
+World Nuclear::tripling-global-nuclear-energy-by-2050-within-reach-if-governments-act-now.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.711169421672821,2
+World Nuclear::world-nuclear-association-calls-for-all-hazards-ap.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.783441424369812,1
+World Nuclear::world-nuclear-association-issues-joint-communique-at-roadmaps-to-new-nuclear-19-september-2024.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.6171194911003113,2
+World Nuclear::world-nuclear-association-response-to-the-internat.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.12883231043815613,0.6228533983230591,4
+World Nuclear::world-nuclear-performance-report-2023-highlights-n.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.7932226657867432,1
+World Nuclear::world-nuclear-performance-report-2024-highlights-increase-in-global-reactor-generation-performance-20-august-2024.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.8649287521839142,0.8649287521839142,2
+World Nuclear::world-nuclear-performance-to-be-highlighted-at-ann.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.0,0.5783505439758301,1
+World Nuclear::world-nuclear-supply-chain-2025-what-to-expect-who-to-watch.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.3673020005226135,0.6268362998962402,4
+World Nuclear::﻿world-nuclear-performance-report-2019-launched.txt,cardiffnlp/twitter-roberta-base-sentiment-latest,0.7227498888969421,0.7227498888969421,2

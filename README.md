@@ -50,3 +50,23 @@ The current tone run scored 372 original articles with:
 Overall mean `ensemble_tone_score`: `0.0278`
 
 The imported UnknownStudio article table contains 507 rows, with 226 duplicate-content mirrors detected between its two source folders.
+
+## Unseen Accuracy Benchmark
+
+Use the external hand-labeled `UnknowStudio4/labels.csv` articles as an unseen benchmark:
+
+```powershell
+& '.\.venv\Scripts\python.exe' evaluate_unseen_sentiment.py
+```
+
+Outputs are written to `models/unseen_eval/`.
+
+Best current result on 50 matched unseen labeled articles:
+
+- Model: `distilbert-base-uncased-finetuned-sst-2-english`
+- Neutral threshold: `0.05`
+- Accuracy: `0.8200`
+- Balanced accuracy: `0.8167`
+- Macro F1: `0.8001`
+
+These are real benchmark metrics because they compare against the external label file, not the SQLite source-type metadata.
