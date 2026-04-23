@@ -1,0 +1,324 @@
+Nuclear Sentiment Analysis - Presentation Prep
+=============================================
+
+Purpose of the project
+----------------------
+
+The goal of this project is to understand how nuclear energy is being discussed in public-facing sources and whether the current conversation looks supportive, concerned, or mixed.
+
+The larger argument is that nuclear energy decisions are not made from engineering facts alone. Public opinion matters. If people mostly hear about waste, accidents, cost overruns, or reactor risk, that can affect policy support, permitting, investment, and adoption. If people hear clear explanations about reliability, clean energy, safety, jobs, and energy security, support can become easier to build.
+
+This project uses sentiment analysis to measure that conversation instead of guessing.
+
+
+Important data correction
+-------------------------
+
+The original SQLite database had a column called label. That column was not real sentiment. It was only a rough source-type tag from the scraper.
+
+I removed that column from the database and from the workflow.
+
+The current database does not use source labels as sentiment truth. Real accuracy checks only use external human-labeled data from the Thuvii / UnknowStudio4 project.
+
+
+Main data sources
+-----------------
+
+1. Original SQLite articles
+
+The main table is nuclear.db -> articles.
+
+It contains 372 articles from sources such as:
+
+- The Guardian
+- World Nuclear News
+- World Nuclear Association
+- Greenpeace
+- Beyond Nuclear
+
+The table now contains only:
+
+- id
+- source
+- title
+- url
+- content
+
+There is no sentiment label column.
+
+
+2. Imported Thuvii / UnknowStudio4 articles
+
+The project also imports article text from:
+
+https://github.com/Thuvii/UnknowStudio4
+
+Those articles are stored in nuclear.db -> external_articles.
+
+This table has 507 rows.
+
+These are useful because they expand the article pool and provide a separate external dataset. The imported table does not create fake sentiment labels.
+
+
+3. External human-labeled benchmark
+
+The UnknowStudio4 repo also has labels.csv with 50 human-labeled examples:
+
+- Positive
+- Neutral
+- Negative
+
+These labels are used only to test model reliability. They are not pulled from the SQLite database.
+
+
+4. Live public-source data
+
+The project also pulls current public discussion from accessible public sources:
+
+- Google News RSS
+- Reddit search
+- Hacker News Algolia
+- GDELT when reachable
+
+It does not pull X / Twitter because reliable search requires API access or credentials.
+
+The current live pull collected 499 public items and stored them in:
+
+- models/public_now/public_opinion_scored_items.csv
+- nuclear.db -> public_opinion_items
+
+
+Models used
+-----------
+
+1. DistilBERT SST-2
+
+Full model name:
+
+distilbert-base-uncased-finetuned-sst-2-english
+
+This is the best-performing model in the project benchmark.
+
+How to explain it:
+
+DistilBERT is a smaller, faster version of BERT. It reads text and predicts whether the tone is positive or negative. In this project, it performed best on the external human-labeled benchmark.
+
+Best benchmark result:
+
+- Accuracy: 82.0%
+- Balanced accuracy: 81.7%
+- Macro F1: 0.800
+
+
+2. Cardiff RoBERTa
+
+Full model name:
+
+cardiffnlp/twitter-roberta-base-sentiment-latest
+
+How to explain it:
+
+This model is designed for short social-media-style text. It is useful because some public opinion data comes from discussion platforms. However, in this project it did not perform as well as DistilBERT on the external benchmark.
+
+
+3. FinBERT
+
+Full model name:
+
+ProsusAI/finbert
+
+How to explain it:
+
+FinBERT is tuned for financial and business text. It is included because nuclear energy discussions often involve investment, cost, infrastructure, markets, and policy. It performed weaker on the benchmark, which suggests finance-specific language is not enough for this broader sentiment task.
+
+
+4. Ensemble Mean
+
+How to explain it:
+
+The ensemble averages model scores. The idea is that combining models can sometimes reduce bias from one model. In this project, the ensemble was useful as a comparison, but DistilBERT alone performed best on the external benchmark.
+
+
+How sentiment scoring works
+---------------------------
+
+Each article or public post is read by a sentiment model.
+
+The model gives a tone score:
+
+- Positive values suggest supportive or favorable tone
+- Negative values suggest concerned or unfavorable tone
+- Values near zero suggest mixed or neutral tone
+
+For the live public-opinion section, the scores are converted into three simple categories:
+
+- Supportive
+- Concerned
+- Mixed / neutral
+
+This makes the dashboard easier to understand.
+
+
+Accuracy and reliability
+------------------------
+
+The dashboard includes a Reliability Check.
+
+This is important because sentiment models can be wrong. To test them, the project compares model predictions against the 50 human-labeled examples from the external UnknowStudio4 labels.csv file.
+
+The best result was DistilBERT SST-2:
+
+- 82% correct
+- 81.7% fair across groups
+- 0.800 overall balance score
+
+How to explain "fair across groups":
+
+It checks whether the model performs reasonably across positive, neutral, and negative examples, instead of only doing well on one category.
+
+How to explain "overall balance":
+
+It is a score that rewards the model for being good across all sentiment categories, not just the most common one.
+
+
+Current public-opinion finding
+------------------------------
+
+The live public-source sample currently shows a concern-leaning conversation.
+
+Current sample:
+
+- Items scored: 499
+- Supportive: 27.3%
+- Concerned: 57.5%
+- Mixed / neutral: 15.2%
+
+Most concern-heavy topic:
+
+- nuclear waste
+
+How to explain this carefully:
+
+This does not prove the entire public is anti-nuclear. It is not a scientific poll. It is a live directional sample from accessible online public sources. It shows that the visible conversation right now is more focused on concern than support, especially around waste and reactor risk.
+
+
+Dashboard sections
+------------------
+
+1. Public Opinion Now
+
+This section shows current public-source sentiment.
+
+It compares:
+
+- Google News
+- Reddit
+- Hacker News
+- GDELT
+
+It also shows which nuclear topics look more supportive or more concerned.
+
+
+2. Tone by Source
+
+This section shows how the original article sources differ in tone.
+
+It helps answer:
+
+- Which sources are more favorable?
+- Which sources are more skeptical?
+- Is the article conversation balanced or tilted?
+
+
+3. Article Mix
+
+This shows how many articles came from each original source.
+
+This matters because a dataset can look more positive or more negative depending on which sources dominate.
+
+
+4. Reliability Check
+
+This section shows how well the models perform against human-labeled examples.
+
+It is included to show that the analysis is not just a random model output. It has a benchmark.
+
+
+5. Model Comparison
+
+This compares:
+
+- DistilBERT SST-2
+- Cardiff RoBERTa
+- FinBERT
+- Ensemble Mean
+
+DistilBERT SST-2 is the strongest model in this project.
+
+
+6. Most Extreme Original Articles
+
+This shows articles with the strongest lower-tone and higher-tone scores.
+
+This is useful for examples during the presentation.
+
+
+Suggested presentation flow
+---------------------------
+
+1. Start with the problem
+
+"Nuclear energy is often discussed through emotion-heavy topics like safety, waste, cost, and climate. Those narratives can affect public support and policy decisions."
+
+2. Explain the data
+
+"I collected nuclear-related articles from the project database, imported another public article dataset, and pulled current public discussion from accessible sources like Google News, Reddit, Hacker News, and GDELT."
+
+3. Clarify the label issue
+
+"The original database had a label column, but that was not real sentiment, so I removed it. Sentiment accuracy is tested only against a separate human-labeled file."
+
+4. Explain the models
+
+"I compared several transformer sentiment models: DistilBERT, Cardiff RoBERTa, FinBERT, and an ensemble average. DistilBERT performed best on the human-labeled benchmark."
+
+5. Give the reliability result
+
+"The best model correctly classified 82% of the external labeled examples."
+
+6. Present the current public signal
+
+"In the current public-source sample, the conversation is concern-leaning: about 58% concerned, 27% supportive, and 15% mixed or neutral."
+
+7. Explain what topic drives concern
+
+"The most concern-heavy topic is nuclear waste, which suggests that any pro-nuclear communication strategy has to address waste and safety directly."
+
+8. Close with the value of the project
+
+"The value of this project is that it turns a vague public conversation into measurable data. It helps identify where nuclear energy is supported, where people are concerned, and what topics need clearer communication."
+
+
+What not to overclaim
+---------------------
+
+Do not say:
+
+- "This proves public opinion is anti-nuclear."
+- "This predicts elections or policy outcomes."
+- "These are poll results."
+- "The old SQLite labels were sentiment labels."
+
+Better wording:
+
+- "This is a directional signal from accessible public sources."
+- "The visible conversation is concern-leaning right now."
+- "The strongest concern topic in this pull is nuclear waste."
+- "The model was checked against a small human-labeled benchmark."
+
+
+Best short summary
+------------------
+
+"This project measures how nuclear energy is being framed across articles and public discussion. After removing fake source labels from the database, I used pretrained sentiment models and an external human-labeled benchmark to evaluate reliability. The best model was DistilBERT, with 82% accuracy on unseen labeled examples. In the current public-source sample, the conversation is concern-leaning, especially around nuclear waste. The takeaway is that public support for nuclear energy depends not only on technical benefits, but on whether concerns are addressed clearly and credibly."
+

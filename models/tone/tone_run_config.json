@@ -1,0 +1,13 @@
+{
+  "db_path": "nuclear.db",
+  "table": "articles",
+  "output_dir": "models/tone",
+  "max_articles": null,
+  "max_chunks_per_article": 6,
+  "models": [
+    "distilbert-base-uncased-finetuned-sst-2-english",
+    "ProsusAI/finbert",
+    "cardiffnlp/twitter-roberta-base-sentiment-latest"
+  ],
+  "created_at_epoch": 1776923218.5953379
+}

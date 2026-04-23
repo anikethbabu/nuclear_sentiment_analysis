@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import re
 import sqlite3
 from pathlib import Path
 
@@ -24,13 +25,15 @@ def content_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8", errors="ignore")).hexdigest()
 
 
-def import_articles(db_path: Path, external_root: Path) -> tuple[int, int]:
+def import_articles(db_path: Path, external_root: Path, table: str) -> tuple[int, int]:
+    if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", table):
+        raise ValueError("Table name must be a simple SQLite identifier.")
     db_path.parent.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(db_path)
     cur = con.cursor()
     cur.execute(
-        """
-        CREATE TABLE IF NOT EXISTS articles (
+        f"""
+        CREATE TABLE IF NOT EXISTS {table} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             article_id TEXT UNIQUE NOT NULL,
             source TEXT NOT NULL,
@@ -62,8 +65,8 @@ def import_articles(db_path: Path, external_root: Path) -> tuple[int, int]:
             seen_hashes.add(digest)
             title = file_path.stem.replace("-", " ").strip()
             cur.execute(
-                """
-                INSERT OR REPLACE INTO articles
+                f"""
+                INSERT OR REPLACE INTO {table}
                 (article_id, source, filename, title, path, content, content_sha256, word_count)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
@@ -88,10 +91,11 @@ def import_articles(db_path: Path, external_root: Path) -> tuple[int, int]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Import repository article text files into SQLite.")
     parser.add_argument("--external-root", default=str(Path("..") / "UnknowStudio4"))
-    parser.add_argument("--db", default="models/unknownstudio/unknownstudio_articles.db")
+    parser.add_argument("--db", default="nuclear.db")
+    parser.add_argument("--table", default="external_articles")
     args = parser.parse_args()
 
-    inserted, skipped_duplicates = import_articles(Path(args.db), Path(args.external_root))
+    inserted, skipped_duplicates = import_articles(Path(args.db), Path(args.external_root), args.table)
     print(f"imported_or_updated={inserted}")
     print(f"duplicate_content_seen={skipped_duplicates}")
     print(f"database={args.db}")

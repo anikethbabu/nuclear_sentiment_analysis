@@ -1,14 +1,8 @@
 # Nuclear Sentiment Analysis
 
-This project trains nuclear article sentiment/stance models from `nuclear.db`.
+This project scores nuclear news/article tone from `nuclear.db`.
 
-Important caveat: the current database uses weak labels from source identity:
-
-- `pro`: World Nuclear News and World Nuclear Association
-- `negative`: Greenpeace and Beyond Nuclear
-- `mixed`: The Guardian
-
-That makes the trained model useful for modeling stance in this scraped corpus, but it is not a substitute for human-labeled sentiment data.
+Important data rule: the SQLite `articles.label` column is not sentiment ground truth. It is source metadata from the scraper, now handled as `source_type`. The scoring code does not train a classifier from that column and does not report accuracy/CV metrics against it.
 
 ## Setup
 
@@ -16,57 +10,93 @@ That makes the trained model useful for modeling stance in this scraped corpus, 
 & '.\.venv\Scripts\python.exe' -m pip install -r requirements.txt
 ```
 
-## Train classical CV models
+## Score Article Tone
 
 ```powershell
-& '.\.venv\Scripts\python.exe' train_nuclear_sentiment.py
+& '.\.venv\Scripts\python.exe' score_nuclear_articles.py
 ```
 
-The script trains and cross-validates:
+The scorer uses three pretrained transformer sentiment engines and writes continuous tone statistics to `models/tone/`:
 
-- TF-IDF + logistic regression
-- Hybrid word/character TF-IDF + calibrated linear SVM
-- Hybrid word/character TF-IDF + Complement Naive Bayes
-- Hybrid word/character TF-IDF + SGD classifier
-- Word TF-IDF + Extra Trees
-- A soft-voting ensemble
+- `article_tone_scores.csv` - per-article continuous scores from each model plus ensemble score
+- `model_tone_scores_long.csv` - long-form per-model scoring output
+- `tone_summary_by_source.csv` - source-level summary statistics
+- `tone_report.md` - readable report
 
-Outputs are written to `models/`.
+The main statistics are:
 
-## Train with transformer fine-tuning too
+- `ensemble_tone_score`: average continuous tone score across models, from `-1` to `1`
+- `model_disagreement`: standard deviation across the model scores
+- `source_type`: scraper/source metadata only; not used for scoring or statistics
 
-```powershell
-& '.\.venv\Scripts\python.exe' train_nuclear_sentiment.py --run-transformer --transformer-epochs 3
-```
+## Import UnknownStudio Articles
 
-This additionally fine-tunes `distilbert/distilbert-base-uncased` using PyTorch and Hugging Face Transformers.
-
-## Predict a new article
-
-```powershell
-& '.\.venv\Scripts\python.exe' predict_nuclear_sentiment.py --text "New nuclear reactor approvals are expected to reduce emissions and stabilize the grid."
-```
-
-## Import and compare UnknownStudio articles
-
-The `UnknowStudio4` repository contains 507 article text entries and 50 hand labels. If that repo is checked out next to this one at `..\UnknowStudio4`, import its articles into SQLite with:
+The `UnknowStudio4` repository contains additional article text files. If it is checked out next to this repository at `..\UnknowStudio4`, import those articles into this project’s SQLite database with:
 
 ```powershell
 & '.\.venv\Scripts\python.exe' import_unknownstudio_articles.py
 ```
 
-Run the model competition against its labeled set:
+That creates or updates an `external_articles` table in `nuclear.db`. It does not create sentiment labels.
+
+## Current Output
+
+The current tone run scored 372 original articles with:
+
+- `distilbert-base-uncased-finetuned-sst-2-english`
+- `ProsusAI/finbert`
+- `cardiffnlp/twitter-roberta-base-sentiment-latest`
+
+Overall mean `ensemble_tone_score`: `0.0278`
+
+The imported UnknownStudio article table contains 507 rows, with 226 duplicate-content mirrors detected between its two source folders.
+
+## Unseen Accuracy Benchmark
+
+Use the external hand-labeled `UnknowStudio4/labels.csv` articles as an unseen benchmark:
 
 ```powershell
-& '.\.venv\Scripts\python.exe' train_unknownstudio_competition.py
+& '.\.venv\Scripts\python.exe' evaluate_unseen_sentiment.py
 ```
 
-Outputs are written to `models/unknownstudio/`, including the imported SQLite database, predictions for every imported article, CV metrics, and `unknownstudio_best_sentiment_model.joblib`.
+Outputs are written to `models/unseen_eval/`.
 
-Current comparison summary:
+Best current result on 50 matched unseen labeled articles:
 
-- Existing `sentiment_cache.csv` threshold baseline: macro F1 `0.9756`
-- Best new model trained only on the 50 labels: CV macro F1 `0.4709`
-- Transferred `nuclear.db` model mapped to Positive/Neutral/Negative: macro F1 `0.1875`
+- Model: `distilbert-base-uncased-finetuned-sst-2-english`
+- Neutral threshold: `0.05`
+- Accuracy: `0.8200`
+- Balanced accuracy: `0.8167`
+- Macro F1: `0.8001`
 
-The cached baseline is currently strongest on those 50 labels. The transferred `nuclear.db` model performs poorly because its source-derived `pro/mixed/negative` labels do not match the hand-labeled Positive/Neutral/Negative task very well.
+These are real benchmark metrics because they compare against the external label file, not the SQLite source-type metadata.
+
+## Presentation Dashboard
+
+Launch the Streamlit dashboard:
+
+```powershell
+& '.\.venv\Scripts\python.exe' -m streamlit run dashboard.py
+```
+
+The dashboard is designed as a nontechnical 1-2 minute briefing: corrected database counts, source-level tone findings, current public-source sentiment, reliability check, representative extreme-tone articles, and a concise narrative about how sentiment can affect public support, permitting, investment, and policy momentum for nuclear energy.
+
+## Public Opinion Now
+
+Collect current public-source signals and estimate present stance:
+
+```powershell
+& '.\.venv\Scripts\python.exe' public_opinion_now.py
+```
+
+The live collector pulls accessible public content from Google News RSS, Reddit search, Hacker News, and GDELT when reachable. X/Twitter is not collected without API credentials. Outputs are written to `models/public_now/` and a `public_opinion_items` table is written into `nuclear.db`.
+
+Current live directional sample:
+
+- Items scored: `499`
+- Predicted supportive signal: `27.3%`
+- Predicted concerned signal: `57.5%`
+- Predicted mixed/neutral signal: `15.2%`
+- Most concern-heavy topic in this pull: `nuclear waste`
+
+This is a directional public/media signal, not a statistically representative poll.
