@@ -1,10 +1,22 @@
 # Nuclear Sentiment Analysis
 
-This project scores nuclear news/article tone from `nuclear.db`.
+This project scores nuclear news/article tone from `nuclear.db` and presents the results in a Streamlit dashboard.
+
+The dashboard is portable from GitHub because the SQLite database and dashboard output files are tracked in the repository. The large local transformer checkpoint under `models/transformer_distilbert/` is intentionally ignored and is not required to boot the dashboard.
 
 Important data rule: the SQLite `articles.label` column is not sentiment ground truth. It is source metadata from the scraper, now handled as `source_type`. The scoring code does not train a classifier from that column and does not report accuracy/CV metrics against it.
 
 ## Setup
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+If Windows does not expose `python`, use the full path to an installed Python executable.
+
+For this local workspace, the existing virtual environment can be used with:
 
 ```powershell
 & '.\.venv\Scripts\python.exe' -m pip install -r requirements.txt
@@ -31,7 +43,7 @@ The main statistics are:
 
 ## Import UnknownStudio Articles
 
-The `UnknowStudio4` repository contains additional article text files. If it is checked out next to this repository at `..\UnknowStudio4`, import those articles into this project’s SQLite database with:
+The `UnknowStudio4` repository contains additional article text files. If it is checked out next to this repository at `..\UnknowStudio4`, import those articles into this project's SQLite database with:
 
 ```powershell
 & '.\.venv\Scripts\python.exe' import_unknownstudio_articles.py
@@ -79,7 +91,31 @@ Launch the Streamlit dashboard:
 & '.\.venv\Scripts\python.exe' -m streamlit run dashboard.py
 ```
 
-The dashboard is designed as a nontechnical 1-2 minute briefing: corrected database counts, source-level tone findings, current public-source sentiment, reliability check, representative extreme-tone articles, and a concise narrative about how sentiment can affect public support, permitting, investment, and policy momentum for nuclear energy.
+The dashboard is designed as a clean, data-first presentation: current public-source stance estimates, public themes/trends, source-level tone findings, model comparison, reliability checks, and representative original articles.
+
+## Portable Dashboard Boot
+
+The dashboard can start on another machine from the files already committed to GitHub. Required tracked files include:
+
+- `nuclear.db`
+- `dashboard.py`
+- `requirements.txt`
+- `models/tone/*`
+- `models/unseen_eval/*`
+- `models/public_now/*`
+
+Quick start from a fresh clone:
+
+```powershell
+git clone <repo-url>
+cd nuclear_sentiment_analysis
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m streamlit run dashboard.py
+```
+
+The dashboard uses saved outputs by default, so it does not need to rerun transformer scoring or collect fresh public items just to open. To refresh the underlying public-source sample, run `public_opinion_now.py`.
 
 ## Public Opinion Now
 
