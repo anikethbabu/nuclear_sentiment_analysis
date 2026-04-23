@@ -37,6 +37,25 @@ st.markdown(
         border-radius: 6px;
         margin: 0.35rem 0 0.7rem 0;
     }
+    .thesis {
+        padding: 1rem 1.15rem;
+        border: 1px solid #cfd9e6;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%);
+        margin: 0.7rem 0 0.9rem 0;
+    }
+    .thesis h3 {margin: 0 0 0.35rem 0; font-size: 1.15rem;}
+    .thesis p {margin: 0; color: #344054; line-height: 1.45;}
+    .decision-card {
+        min-height: 148px;
+        padding: 0.95rem 1rem;
+        border: 1px solid #d8dee8;
+        border-radius: 8px;
+        background: #ffffff;
+        box-shadow: 0 1px 2px rgba(20, 32, 55, 0.04);
+    }
+    .decision-card h4 {margin: 0 0 0.35rem 0; font-size: 1rem;}
+    .decision-card p {margin: 0; color: #475467; line-height: 1.42;}
     .small-note {color: #5c6675; font-size: 0.92rem;}
     </style>
     """,
@@ -87,10 +106,12 @@ best_key = f"{best['model']}|threshold={best['neutral_threshold']}"
 best_details = unseen_details[best_key]
 overall = source_summary[source_summary["source"] == "ALL"].iloc[0]
 by_source = source_summary[source_summary["source"] != "ALL"].copy()
+highest_tone = by_source.sort_values("mean_tone_score", ascending=False).iloc[0]
+lowest_tone = by_source.sort_values("mean_tone_score", ascending=True).iloc[0]
 
-st.title("Nuclear Article Tone Brief")
+st.title("Nuclear Sentiment & Decision Brief")
 st.markdown(
-    "<div class='small-note'>SQLite source-rating columns were removed. Tone uses pretrained scorers; accuracy uses only external ground-truth labels.</div>",
+    "<div class='small-note'>A decision-support view of how nuclear energy is framed in articles, using model-estimated tone and external ground-truth benchmark labels.</div>",
     unsafe_allow_html=True,
 )
 
@@ -104,13 +125,56 @@ metric_cols[4].metric("Best Macro F1", f"{best['macro_f1']:.3f}")
 st.markdown(
     f"""
     <div class='takeaway'>
-    <b>Presenter takeaway:</b> the corrected pipeline separates source metadata from sentiment. On the external labeled benchmark,
-    <b>{best['model']}</b> performs best with <b>{best['accuracy']:.0%}</b> accuracy and <b>{best['macro_f1']:.3f}</b> macro F1.
-    The original corpus is nearly tone-balanced overall, with source-level differences visible below.
+    <b>Presenter takeaway:</b> nuclear policy is not decided by technical facts alone. Public trust is shaped by the tone of stories people see:
+    safety risk, climate value, cost, waste, jobs, reliability, and national security. This project turns those narratives into measurable signals,
+    so advocates can see where support is strong, where concern is concentrated, and which messages need evidence.
     </div>
     """,
     unsafe_allow_html=True,
 )
+
+st.markdown(
+    f"""
+    <div class='thesis'>
+    <h3>The case this analysis supports</h3>
+    <p>
+    Nuclear energy can be presented as a serious clean-power option, but the communication challenge is trust.
+    In this corpus the average tone is close to neutral (<b>{overall['mean_tone_score']:.3f}</b>), which means the public conversation is still movable.
+    The most favorable source signal is <b>{highest_tone['source']}</b> at <b>{highest_tone['mean_tone_score']:.3f}</b>;
+    the most skeptical signal is <b>{lowest_tone['source']}</b> at <b>{lowest_tone['mean_tone_score']:.3f}</b>.
+    That spread is the decision opportunity: respond to concerns directly while making nuclear's reliability, safety record, and clean-energy role easier to understand.
+    </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+decision_cols = st.columns(3)
+decision_cards = [
+    (
+        "Why sentiment affects decisions",
+        "Permits, funding, and adoption move faster when the public hears a credible benefits story and sees risks handled transparently.",
+    ),
+    (
+        "What leaders should track",
+        "Monitor tone by source, model disagreement, and recurring negative frames; those are early warning signs for public resistance.",
+    ),
+    (
+        "How to use this",
+        "Build messages around clean reliability, cost realism, waste accountability, and local jobs instead of assuming technical merit sells itself.",
+    ),
+]
+for col, (title, body) in zip(decision_cols, decision_cards):
+    with col:
+        st.markdown(
+            f"""
+            <div class='decision-card'>
+            <h4>{title}</h4>
+            <p>{body}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 left, right = st.columns([1.15, 0.85])
 
@@ -158,6 +222,15 @@ with right:
     st.altair_chart(source_mix, use_container_width=True)
 
 st.subheader("Unseen Ground-Truth Benchmark")
+st.markdown(
+    f"""
+    <div class='small-note'>
+    The benchmark below checks whether the sentiment scoring is credible on genuinely labeled external articles.
+    Best run: <b>{best['accuracy']:.0%}</b> accuracy and <b>{best['macro_f1']:.3f}</b> macro F1.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 rank_view = unseen_ranking.copy()
 rank_view["run"] = rank_view["model"].str.replace("distilbert-base-uncased-finetuned-sst-2-english", "DistilBERT SST-2", regex=False)
 rank_view["run"] = rank_view["run"].str.replace("cardiffnlp/twitter-roberta-base-sentiment-latest", "Cardiff RoBERTa", regex=False)
@@ -247,4 +320,17 @@ st.dataframe(
         "ensemble_tone_score": st.column_config.NumberColumn("Tone", format="%.3f"),
         "model_disagreement": st.column_config.NumberColumn("Disagreement", format="%.3f"),
     },
+)
+
+st.subheader("1-Minute Close")
+st.markdown(
+    """
+    <div class='takeaway'>
+    <b>Conclusion:</b> This project does not claim every nuclear article is positive. It shows that sentiment is measurable,
+    varies by outlet, and can be benchmarked against labeled data. For nuclear energy advocates, that means communication strategy
+    can become evidence-driven: identify skeptical frames early, answer them with transparent facts, and emphasize nuclear's role
+    in reliable low-carbon power where the conversation is still neutral enough to shift.
+    </div>
+    """,
+    unsafe_allow_html=True,
 )

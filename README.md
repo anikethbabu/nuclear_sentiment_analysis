@@ -79,4 +79,4 @@ Launch the Streamlit dashboard:
 & '.\.venv\Scripts\python.exe' -m streamlit run dashboard.py
 ```
 
-The dashboard is designed for a 1-2 minute presentation: corrected database counts, source-level tone findings, the unseen benchmark leaderboard, the best confusion matrix, and representative extreme-tone articles.
+The dashboard is designed for a 1-2 minute presentation: corrected database counts, source-level tone findings, the unseen benchmark leaderboard, the best confusion matrix, representative extreme-tone articles, and a concise decision narrative about how sentiment can affect public support, permitting, investment, and policy momentum for nuclear energy.
