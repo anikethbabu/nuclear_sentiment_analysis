@@ -31,13 +31,6 @@ st.markdown(
         background: #ffffff;
         box-shadow: 0 1px 2px rgba(20, 32, 55, 0.04);
     }
-    .data-note {
-        border-left: 4px solid #2374ab;
-        padding: 0.75rem 1rem;
-        background: #f5f8fb;
-        border-radius: 6px;
-        margin: 0.35rem 0 0.7rem 0;
-    }
     .small-note {color: #5c6675; font-size: 0.92rem;}
     </style>
     """,
@@ -101,17 +94,6 @@ public_overall = public_platform[public_platform["platform"] == "ALL"].iloc[0]
 public_by_platform = public_platform[public_platform["platform"] != "ALL"].copy()
 
 st.title("Nuclear Energy Public Sentiment")
-st.markdown(
-    "<div class='small-note'>A plain-language view of how nuclear energy is being discussed across news and public forums.</div>",
-    unsafe_allow_html=True,
-)
-
-metric_cols = st.columns([1, 1, 1, 1, 1])
-metric_cols[0].metric("Original Articles", f"{counts.get('articles', 0):,}")
-metric_cols[1].metric("Imported Articles", f"{counts.get('external_articles', 0):,}")
-metric_cols[2].metric("Current Public Items", f"{int(public_overall['items']):,}")
-metric_cols[3].metric("Concerned Now", f"{public_overall['concerned_share']:.0%}")
-metric_cols[4].metric("Supportive Now", f"{public_overall['supportive_share']:.0%}")
 
 st.subheader("Public Opinion Now")
 st.markdown(
@@ -193,18 +175,6 @@ with public_left:
     st.altair_chart(stance_chart, use_container_width=True)
 with public_right:
     st.altair_chart(query_chart, use_container_width=True)
-
-st.markdown(
-    f"""
-    <div class='data-note'>
-    <b>Current reading:</b> the accessible public conversation is concern-leaning right now:
-    <b>{public_overall['concerned_share']:.0%}</b> concerned, <b>{public_overall['supportive_share']:.0%}</b> supportive,
-    and <b>{public_overall['neutral_share']:.0%}</b> mixed/neutral. The most negative topic signal is
-    <b>{public_query.sort_values('mean_tone_score').iloc[0]['query']}</b>.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
 
 left, right = st.columns([1.15, 0.85])
 
